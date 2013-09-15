@@ -59,6 +59,20 @@ void mouse(int button, int state, int x, int y)
 }
 
 
+void keyPressed(unsigned char key, int x, int y)
+{
+	
+}
+
+
+void keySpecial(int key, int x, int y)
+{
+	observable_data data;
+	data.a = key;
+	messaging::getInstance().notify(MSG_KEYBOARD_S,data);
+}
+
+
 int main (int argc, char **argv)
 {
 	glutInit(&argc, argv);
@@ -71,6 +85,8 @@ int main (int argc, char **argv)
     glutReshapeFunc(reshape);
 	glutIdleFunc(idle);
 	glutMouseFunc(mouse);
+	glutKeyboardFunc(keyPressed);
+	glutSpecialFunc(keySpecial);
 	
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);

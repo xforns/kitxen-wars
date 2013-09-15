@@ -13,6 +13,7 @@
 #include "defs.h"
 #include "messaging.h"
 #include "observer.h"
+#include "character.h"
 
 using namespace std;
 
@@ -23,13 +24,12 @@ private:
 	
 	GLuint _bg1, _bg2;
 	
-	GLuint _char;
-	
 	clock_t _last_clock;
 	
 	double _bg_y1, _bg_y2;
 	
-	pt _pt_char;
+	character _character;
+	
 	
 	void draw_bg();
 	void draw_main_character();

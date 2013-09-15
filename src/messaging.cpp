@@ -10,7 +10,6 @@
 
 void messaging::add(observer *object)
 {
-	
 	if(dynamic_cast<observer*>(object)==NULL)
 	{
 		return;

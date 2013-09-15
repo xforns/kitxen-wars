@@ -17,6 +17,8 @@
 
 #define MSG_MOUSE 0
 #define MSG_EPISODE 1
+#define MSG_KEYBOARD 2
+#define MSG_KEYBOARD_S 3
 
 #define EPISODE_SPLASH 0
 #define EPISODE_MENU 1

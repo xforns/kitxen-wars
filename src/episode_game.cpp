@@ -34,22 +34,19 @@ void episode_game::start()
 	_bg_y1 = 0.f;
 	_bg_y2 = 200.f;
 	
-	_char = asset_helper::getInstance().get_texture(asset_helper::CHARACTER);
-	
-	_pt_char.x = 160.f;
-	_pt_char.y = 50.f;
-	
 	_last_clock = clock();
 }
 
 
 void episode_game::stop()
 {
-	episode::stop();
+	_character.stop();
 	
 	messaging::getInstance().remove(this);
 	
 	asset_helper::getInstance().unload_texture(asset_helper::HELP);
+	
+	episode::stop();
 }
 
 
@@ -85,6 +82,8 @@ void episode_game::update()
 		
 		_last_clock = clock();
 	}
+	
+	_character.update();
 }
 
 
@@ -150,23 +149,7 @@ void episode_game::draw_bg()
 
 void episode_game::draw_main_character()
 {
-	glPushMatrix();
-	
-	glTranslatef(_pt_char.x,_pt_char.y,0.f);
-	
-	glBindTexture(GL_TEXTURE_2D,_char);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);	
-	
-    glBegin(GL_QUADS);
-    glTexCoord2i(1,1); glVertex2i(40,40);	// top right
-    glTexCoord2i(1,0); glVertex2i(40,0);	// bottom right
-    glTexCoord2i(0,0); glVertex2i(0,0);		// bottom left
-    glTexCoord2i(0,1); glVertex2i(0,40);	// top left
-	glEnd();
-	
-	glPopMatrix();
+	_character.draw();
 }
 
 
