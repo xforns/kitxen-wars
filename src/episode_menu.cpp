@@ -24,6 +24,8 @@ void episode_menu::start()
 {
 	episode::start();
 	
+	messaging::getInstance().add(this);
+	
 	_bg = asset_helper::getInstance().get_texture(asset_helper::MENU);
 }
 
@@ -31,6 +33,8 @@ void episode_menu::start()
 void episode_menu::stop()
 {
 	episode::stop();
+	
+	messaging::getInstance().remove(this);
 	
 	asset_helper::getInstance().unload_texture(asset_helper::MENU);
 }
@@ -64,34 +68,46 @@ void episode_menu::draw()
 }
 
 
-void episode_menu::mouse(uint32_t status, int x, int y)
+/****************************************************************
+
+						observer interface
+
+****************************************************************/
+
+
+void episode_menu::update(int msg_type, const observable_data &param)
 {
 	// check for pressed options:
-	if(status==LMB_PRESSED)
+	if(msg_type==MSG_MOUSE)
 	{
-		// game
-		if( (x>=324) && (x<=417) && (y>=152) && (y<=198) )
+		if(param.a==LMB_PRESSED)
 		{
-			observable_data data;
-			data.a = EPISODE_GAME;
-			messaging::getInstance().notify(MSG_EPISODE,data);
-		}
-		// help
-		else if( (x>=324) && (x<=417) && (y>=265) && (y<=308) )
-		{
-			observable_data data;
-			data.a = EPISODE_HELP;
-			messaging::getInstance().notify(MSG_EPISODE,data);
-		}
-		// exit
-		else if( (x>=324) && (x<=417) && (y>=380) && (y<=425) )
-		{
-			observable_data data;
-			data.a = EPISODE_EXIT;
-			messaging::getInstance().notify(MSG_EPISODE,data);
+			int x = param.b;
+			int y = param.c;
+			
+			// game
+			if( (x>=324) && (x<=417) && (y>=152) && (y<=198) )
+			{
+				observable_data data;
+				data.a = EPISODE_GAME;
+				messaging::getInstance().notify(MSG_EPISODE,data);
+			}
+			// help
+			else if( (x>=324) && (x<=417) && (y>=265) && (y<=308) )
+			{
+				observable_data data;
+				data.a = EPISODE_HELP;
+				messaging::getInstance().notify(MSG_EPISODE,data);
+			}
+			// exit
+			else if( (x>=324) && (x<=417) && (y>=380) && (y<=425) )
+			{
+				observable_data data;
+				data.a = EPISODE_EXIT;
+				messaging::getInstance().notify(MSG_EPISODE,data);
+			}
 		}
 	}
-	
 }
 
 

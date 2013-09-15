@@ -24,6 +24,8 @@ void episode_help::start()
 {
 	episode::start();
 	
+	messaging::getInstance().add(this);
+	
 	_bg = asset_helper::getInstance().get_texture(asset_helper::HELP);
 }
 
@@ -31,6 +33,8 @@ void episode_help::start()
 void episode_help::stop()
 {
 	episode::stop();
+	
+	messaging::getInstance().remove(this);
 	
 	asset_helper::getInstance().unload_texture(asset_helper::HELP);
 }
@@ -64,16 +68,24 @@ void episode_help::draw()
 }
 
 
-void episode_help::mouse(uint32_t status, int x, int y)
+/****************************************************************
+
+						observer interface
+
+****************************************************************/
+
+
+void episode_help::update(int msg_type, const observable_data &param)
 {
-	// check for pressed options:
-	if(status==LMB_PRESSED)
+	if(msg_type==MSG_MOUSE)
 	{
-		observable_data data;
-		data.a = EPISODE_MENU;
-		messaging::getInstance().notify(MSG_EPISODE,data);
+		if(param.a==LMB_PRESSED)
+		{
+			observable_data data;
+			data.a = EPISODE_MENU;
+			messaging::getInstance().notify(MSG_EPISODE,data);
+		}
 	}
-	
 }
 
 

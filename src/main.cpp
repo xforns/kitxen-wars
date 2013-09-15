@@ -50,7 +50,12 @@ void mouse(int button, int state, int x, int y)
         mouse_status = (mouse_status & ~(0L | MB_CLICKED(mouse_status,b))) | MB_PRESSED(mouse_status,b);
     }
 	
-	episodes.mouse(mouse_status,x,y);
+	// notify observers
+	observable_data data;
+	data.a = mouse_status;
+	data.b = x;
+	data.c = y;
+	messaging::getInstance().notify(MSG_MOUSE,data);
 }
 
 

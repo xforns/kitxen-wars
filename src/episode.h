@@ -25,7 +25,6 @@ public:
 	virtual void start();
 	virtual void stop();
 	virtual void pause();
-	virtual void mouse(uint32_t status, int x, int y)=0;
 	virtual void update()=0;
 	virtual void draw()=0;
 	virtual _episode_status get_episode_status();

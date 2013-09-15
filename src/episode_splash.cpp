@@ -86,10 +86,6 @@ void episode_splash::draw()
 }
 
 
-void episode_splash::mouse(uint32_t status, int x, int y)
-{
-}
-
 /****************************************************************
 
 							private

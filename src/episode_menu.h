@@ -8,13 +8,15 @@
 #include <ctime>
 
 #include "episode.h"
+#include "observer.h"
+#include "messaging.h"
 #include "asset_helper.h"
 #include "defs.h"
 #include "messaging.h"
 
 using namespace std;
 
-class episode_menu : public episode
+class episode_menu : public episode, public observer
 {
 
 private:
@@ -31,7 +33,8 @@ public:
 	virtual void pause();
 	virtual void update();
 	virtual void draw();
-	virtual void mouse(uint32_t status, int x, int y);
+	
+	virtual void update(int msg_type, const observable_data &param);
 };
 
 #endif /* EPISODE_MENU_H */

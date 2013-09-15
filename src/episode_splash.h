@@ -36,7 +36,6 @@ public:
 	virtual void pause();
 	virtual void update();
 	virtual void draw();
-	virtual void mouse(uint32_t status, int x, int y);
 	
 	void init_timer();
 	bool timer_expired();

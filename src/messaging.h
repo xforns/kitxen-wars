@@ -4,8 +4,9 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <typeinfo>
+#include <iostream>
 
-//#include "simple_callback.h"
 #include "observer.h"
 #include "defs.h"
 
@@ -32,6 +33,7 @@ public:
 	}
 	
 	void add(observer *object);
+	void remove(observer *object);
 	
 	void notify(int msg_type, const observable_data &t);
 		

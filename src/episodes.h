@@ -41,7 +41,6 @@ public:
 	void start();
 	void glutDisplayFunc();
 	void glutReshapeFunc(int w, int h);
-	void mouse(uint32_t status, int x, int y);
 	
 	virtual void update(int msg_type, const observable_data &param);
 		 

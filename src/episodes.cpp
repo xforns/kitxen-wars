@@ -46,12 +46,6 @@ void episodes::glutReshapeFunc(int w, int h)
 }
 
 
-void episodes::mouse(uint32_t status, int x, int y)
-{
-	_current_episode->mouse(status,x,y);
-}
-
-
 /****************************************************************
 
 						observer interface
@@ -131,6 +125,13 @@ bool episodes::load(_episode_defs episode)
 {
 	_current_episode_def = episode;
 	
+	// stop current episode
+	if(_current_episode!=NULL)
+	{
+		_current_episode->stop();
+	}
+	
+	// load new episode
 	if(_current_episode_def==SPLASH)
 	{
 		_current_episode = new episode_splash();
