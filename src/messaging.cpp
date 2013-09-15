@@ -22,7 +22,6 @@ void messaging::add(observer *object)
 
 void messaging::remove(observer *object)
 {
-	
 	if(dynamic_cast<observer*>(object)==NULL)
 	{
 		return;
@@ -32,7 +31,9 @@ void messaging::remove(observer *object)
 	
 	while(it!=_observers.end())
 	{
-		if(typeid(object)==typeid((*it)))
+		observer *obs = (*it);
+		
+		if(typeid(*object)==typeid((*obs)))
 		{
 			_observers.erase(it);
 			break;
@@ -49,6 +50,10 @@ void messaging::notify(int msg_type, const observable_data &t)
 	
 	for(it=_observers.begin(); it!=_observers.end(); ++it)
 	{
+		if(*it==NULL)
+		{
+			continue;
+		}
 		(*it)->update(msg_type,t);
 	}
 }

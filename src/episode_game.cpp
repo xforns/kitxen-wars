@@ -26,6 +26,8 @@ void episode_game::start()
 {
 	episode::start();
 	
+	messaging::getInstance().add(this);
+	
 	_bg1 = asset_helper::getInstance().get_texture(asset_helper::BG_1);
 	_bg2 = asset_helper::getInstance().get_texture(asset_helper::BG_2);
 	
@@ -44,6 +46,8 @@ void episode_game::start()
 void episode_game::stop()
 {
 	episode::stop();
+	
+	messaging::getInstance().remove(this);
 	
 	asset_helper::getInstance().unload_texture(asset_helper::HELP);
 }
@@ -172,16 +176,24 @@ void episode_game::draw_enemies()
 }
 
 
-void episode_game::mouse(uint32_t status, int x, int y)
+/****************************************************************
+
+						observer interface
+
+****************************************************************/
+
+
+void episode_game::update(int msg_type, const observable_data &param)
 {
-	// if clicked mouse, go back to the main menu
-	if(status==LMB_PRESSED)
+	if(msg_type==MSG_MOUSE)
 	{
-		observable_data data;
-		data.a = EPISODE_MENU;
-		messaging::getInstance().notify(MSG_EPISODE,data);
+		if(param.a==LMB_PRESSED)
+		{
+			observable_data data;
+			data.a = EPISODE_MENU;
+			messaging::getInstance().notify(MSG_EPISODE,data);
+		}
 	}
-	
 }
 
 

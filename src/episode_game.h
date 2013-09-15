@@ -12,10 +12,11 @@
 #include "asset_helper.h"
 #include "defs.h"
 #include "messaging.h"
+#include "observer.h"
 
 using namespace std;
 
-class episode_game : public episode
+class episode_game : public episode, public observer
 {
 
 private:
@@ -44,7 +45,8 @@ public:
 	virtual void pause();
 	virtual void update();
 	virtual void draw();
-	virtual void mouse(uint32_t status, int x, int y);
+	
+	virtual void update(int msg_type, const observable_data &param);
 	
 };
 
