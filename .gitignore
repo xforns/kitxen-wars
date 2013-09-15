@@ -6,3 +6,4 @@ obj/episode_splash.o
 obj/episodes.o
 obj/main.o
 obj/messaging.o
+episode_game.o
