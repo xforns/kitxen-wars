@@ -14,6 +14,7 @@
 #include "episode_splash.h"
 #include "episode_menu.h"
 #include "episode_help.h"
+#include "episode_game.h"
 
 using namespace std;
 

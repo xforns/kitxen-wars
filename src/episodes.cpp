@@ -25,7 +25,8 @@ void episodes::start()
 	messaging::getInstance().add(this);
 	
 	// load initial episode
-	load(SPLASH);
+	//load(SPLASH);
+	load(MENU);
 }
 
 
@@ -141,6 +142,10 @@ bool episodes::load(_episode_defs episode)
 	else if(_current_episode_def==HELP)
 	{
 		_current_episode = new episode_help();
+	}
+	else if(_current_episode_def==GAME)
+	{
+		_current_episode = new episode_game();
 	}
 	
 	_current_episode->start();

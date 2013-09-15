@@ -36,5 +36,11 @@ struct observable_data {
 	std::string d;
 };
 
+struct pt {
+	
+	double x;
+	double y;
+};
+
 
 #endif /* DEFS_H */
