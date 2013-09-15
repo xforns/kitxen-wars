@@ -7,3 +7,5 @@ obj/episodes.o
 obj/main.o
 obj/messaging.o
 episode_game.o
+obj/character.o
+obj/entity.o
