@@ -52,10 +52,11 @@ void mouse(int button, int state, int x, int y)
 	
 	// notify observers
 	observable_data data;
+	data.msg_type = MSG_MOUSE;
 	data.a = mouse_status;
 	data.b = x;
 	data.c = y;
-	messaging::getInstance().notify(MSG_MOUSE,data);
+	messaging::getInstance().notify(data);
 }
 
 
@@ -68,8 +69,9 @@ void keyPressed(unsigned char key, int x, int y)
 void keySpecial(int key, int x, int y)
 {
 	observable_data data;
+	data.msg_type = MSG_KEYBOARD_S;
 	data.a = key;
-	messaging::getInstance().notify(MSG_KEYBOARD_S,data);
+	messaging::getInstance().notify(data);
 }
 
 

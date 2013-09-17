@@ -9,7 +9,7 @@ class observer
 public:
 	
 	virtual ~observer() {}
-	virtual void update(int msg_type, const observable_data &param)=0;
+	virtual void update(const observable_data &param)=0;
 	
 };
 

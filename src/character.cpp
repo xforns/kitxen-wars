@@ -14,8 +14,6 @@ character::character()
 	
 	_pos.x = 160.f;
 	_pos.y = 50.f;
-	
-	_added = false;
 }
 
 
@@ -38,11 +36,6 @@ void character::stop()
 
 void character::update()
 {
-	if(!_added)
-	{
-		start();
-		_added = true;
-	}
 }
 
 
@@ -75,9 +68,9 @@ void character::draw()
 ****************************************************************/
 
 
-void character::update(int msg_type, const observable_data &param)
+void character::update(const observable_data &param)
 {
-	if(msg_type==MSG_KEYBOARD_S)
+	if(param.msg_type==MSG_KEYBOARD_S)
 	{
 		switch(param.a)
 		{

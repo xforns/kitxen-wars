@@ -26,6 +26,7 @@ void episodes::start()
 	
 	// load initial episode
 	//load(SPLASH);
+	_next_episode = MENU;
 	load(MENU);
 }
 
@@ -53,20 +54,20 @@ void episodes::glutReshapeFunc(int w, int h)
 ****************************************************************/
 
 
-void episodes::update(int msg_type, const observable_data &param)
+void episodes::update(const observable_data &param)
 {
 	// episode change
-	if(msg_type==MSG_EPISODE)
+	if(param.msg_type==MSG_EPISODE)
 	{
 		// menu
 		if(param.a==EPISODE_MENU)
 		{
-			load(MENU);
+			_next_episode = MENU;
 		}
 		// game
 		else if(param.a==EPISODE_GAME)
 		{
-			load(GAME);
+			_next_episode = GAME;
 		}
 		// game over
 		else if(param.a==EPISODE_GAMEOVER)
@@ -76,11 +77,13 @@ void episodes::update(int msg_type, const observable_data &param)
 		// help
 		else if(param.a==EPISODE_HELP)
 		{
-			load(HELP);
+			_next_episode = HELP;
 		}
 		// exit
 		else if(param.a==EPISODE_EXIT)
 		{
+			_current_episode->stop();
+			delete _current_episode;
 			exit(1);
 		}
 	}
@@ -99,8 +102,13 @@ void episodes::update()
 	{
 		if(_current_episode_def==SPLASH)
 		{
-			load(MENU);
+			_next_episode = MENU;
 		}
+	}
+	
+	if(_current_episode_def!=_next_episode)
+	{
+		load(_next_episode);
 	}
 	
 	_current_episode->update();
@@ -129,6 +137,8 @@ bool episodes::load(_episode_defs episode)
 	if(_current_episode!=NULL)
 	{
 		_current_episode->stop();
+		
+		delete _current_episode;
 	}
 	
 	// load new episode

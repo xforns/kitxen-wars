@@ -17,6 +17,17 @@ entity::~entity()
 {
 }
 
+void entity::setId(long id)
+{
+	_id = id;
+}
+
+
+long entity::getId()
+{
+	return _id;
+}
+
 
 /****************************************************************
 

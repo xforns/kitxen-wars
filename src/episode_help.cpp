@@ -75,15 +75,16 @@ void episode_help::draw()
 ****************************************************************/
 
 
-void episode_help::update(int msg_type, const observable_data &param)
+void episode_help::update(const observable_data &param)
 {
-	if(msg_type==MSG_MOUSE)
+	if(param.msg_type==MSG_MOUSE)
 	{
 		if(param.a==LMB_PRESSED)
 		{
 			observable_data data;
+			data.msg_type = MSG_EPISODE;
 			data.a = EPISODE_MENU;
-			messaging::getInstance().notify(MSG_EPISODE,data);
+			messaging::getInstance().notify(data);
 		}
 	}
 }

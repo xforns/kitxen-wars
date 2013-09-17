@@ -75,10 +75,10 @@ void episode_menu::draw()
 ****************************************************************/
 
 
-void episode_menu::update(int msg_type, const observable_data &param)
+void episode_menu::update(const observable_data &param)
 {
 	// check for pressed options:
-	if(msg_type==MSG_MOUSE)
+	if(param.msg_type==MSG_MOUSE)
 	{
 		if(param.a==LMB_PRESSED)
 		{
@@ -89,22 +89,25 @@ void episode_menu::update(int msg_type, const observable_data &param)
 			if( (x>=324) && (x<=417) && (y>=152) && (y<=198) )
 			{
 				observable_data data;
+				data.msg_type = MSG_EPISODE;
 				data.a = EPISODE_GAME;
-				messaging::getInstance().notify(MSG_EPISODE,data);
+				messaging::getInstance().notify(data);
 			}
 			// help
 			else if( (x>=324) && (x<=417) && (y>=265) && (y<=308) )
 			{
 				observable_data data;
+				data.msg_type = MSG_EPISODE;
 				data.a = EPISODE_HELP;
-				messaging::getInstance().notify(MSG_EPISODE,data);
+				messaging::getInstance().notify(data);
 			}
 			// exit
 			else if( (x>=324) && (x<=417) && (y>=380) && (y<=425) )
 			{
 				observable_data data;
+				data.msg_type = MSG_EPISODE;
 				data.a = EPISODE_EXIT;
-				messaging::getInstance().notify(MSG_EPISODE,data);
+				messaging::getInstance().notify(data);
 			}
 		}
 	}

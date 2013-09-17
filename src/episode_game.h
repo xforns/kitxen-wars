@@ -14,6 +14,7 @@
 #include "messaging.h"
 #include "observer.h"
 #include "character.h"
+#include "collision_system.h"
 
 using namespace std;
 
@@ -46,7 +47,7 @@ public:
 	virtual void update();
 	virtual void draw();
 	
-	virtual void update(int msg_type, const observable_data &param);
+	virtual void update(const observable_data &param);
 	
 };
 

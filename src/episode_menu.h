@@ -34,7 +34,7 @@ public:
 	virtual void update();
 	virtual void draw();
 	
-	virtual void update(int msg_type, const observable_data &param);
+	virtual void update(const observable_data &param);
 };
 
 #endif /* EPISODE_MENU_H */

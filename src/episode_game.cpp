@@ -35,6 +35,8 @@ void episode_game::start()
 	_bg_y2 = 200.f;
 	
 	_last_clock = clock();
+	
+	_character.start();
 }
 
 
@@ -166,15 +168,16 @@ void episode_game::draw_enemies()
 ****************************************************************/
 
 
-void episode_game::update(int msg_type, const observable_data &param)
+void episode_game::update(const observable_data &param)
 {
-	if(msg_type==MSG_MOUSE)
+	if(param.msg_type==MSG_MOUSE)
 	{
 		if(param.a==LMB_PRESSED)
 		{
 			observable_data data;
+			data.msg_type = MSG_EPISODE;
 			data.a = EPISODE_MENU;
-			messaging::getInstance().notify(MSG_EPISODE,data);
+			messaging::getInstance().notify(data);
 		}
 	}
 }

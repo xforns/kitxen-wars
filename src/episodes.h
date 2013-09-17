@@ -26,6 +26,7 @@ private:
 	enum _episode_defs { SPLASH, MENU, GAME, HELP, END };
 	
 	_episode_defs _current_episode_def;
+	_episode_defs _next_episode;
 	
 	episode *_current_episode;
 	
@@ -42,7 +43,7 @@ public:
 	void glutDisplayFunc();
 	void glutReshapeFunc(int w, int h);
 	
-	virtual void update(int msg_type, const observable_data &param);
+	virtual void update(const observable_data &param);
 		 
 };
 
