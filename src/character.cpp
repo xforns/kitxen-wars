@@ -19,7 +19,6 @@ character::character()
 
 character::~character()
 {
-	asset_helper::getInstance().unload_texture(asset_helper::CHARACTER);
 }
 
 
@@ -32,6 +31,8 @@ void character::start()
 void character::stop()
 {
 	messaging::getInstance().remove(this);
+	
+	asset_helper::getInstance().unload_texture(asset_helper::CHARACTER);
 }
 
 void character::update()

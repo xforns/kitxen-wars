@@ -77,6 +77,10 @@ public:
 		// n has to be 1 if erasing is correct
 		int n = _textures.erase(asset);
 		
+		string fname = _filenames[asset];
+		
+		cout << "Unloading asset: " << fname.c_str() << endl << flush;
+		
 		return n==1 ? UNLOADED : FAIL_UNLOADING;
 	}
 	

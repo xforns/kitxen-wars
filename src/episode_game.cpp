@@ -18,7 +18,6 @@ episode_game::episode_game()
 
 episode_game::~episode_game()
 {
-	
 }
 
 
@@ -46,7 +45,8 @@ void episode_game::stop()
 	
 	messaging::getInstance().remove(this);
 	
-	asset_helper::getInstance().unload_texture(asset_helper::HELP);
+	asset_helper::getInstance().unload_texture(asset_helper::BG_1);
+	asset_helper::getInstance().unload_texture(asset_helper::BG_2);
 	
 	episode::stop();
 }
