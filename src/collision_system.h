@@ -32,6 +32,8 @@ private:
 	
 	static bool _cancel_thread;
 	
+	static pthread_mutex_t _mutex;
+	
 	/****************************************************************
 	
 								public
@@ -56,8 +58,9 @@ public:
 	{
 		_cancel_thread = false;
 		
-		pthread_t thread;
+		pthread_mutex_init(&_mutex, NULL);
 		
+		pthread_t thread;
 		pthread_create(&thread,NULL,&t_update,NULL);
 	}
 	
@@ -65,6 +68,8 @@ public:
 	void stop()
 	{
 		_cancel_thread = true;
+		
+		pthread_mutex_destroy(&_mutex);
 	}
 	
 	
@@ -85,28 +90,58 @@ public:
 	
 	void add(entity *object)
 	{
+		pthread_t thread;
+		pthread_create(&thread,NULL,&t_add,object);
+	}
+	
+	
+	static void *t_add(void *vobject)
+	{
+		pthread_mutex_lock(&_mutex);
+		
+		entity *object = (entity *)vobject;
+		
 		if(dynamic_cast<entity*>(object)==NULL)
 		{
-			return;
+			return NULL;
 		}
 		
 		_entities.push_back(object);
+		
+		pthread_mutex_unlock(&_mutex);
+		
+		pthread_exit(NULL);
 	}
 	
 	
 	void remove(entity *object)
 	{
+		pthread_t thread;
+		pthread_create(&thread,NULL,&t_remove,object);
+	}
+	
+	
+	static void *t_remove(void *vobject)
+	{
+		pthread_mutex_lock(&_mutex);
+		
+		entity *object = (entity *)vobject;
+		
 		if(dynamic_cast<entity*>(object)==NULL)
 		{
-			return;
+			return NULL;
 		}
 		
 		vector<entity*>::iterator it = find(_entities.begin(),_entities.end(),object);
 		if(it==_entities.end())
 		{
-			return;
+			return NULL;
 		}
 		_entities.erase(it);
+		
+		pthread_mutex_unlock(&_mutex);
+		
+		pthread_exit(NULL);
 	}
 	
 	
@@ -183,6 +218,8 @@ public:
 	
 	static void *t_update(void *)
 	{
+		pthread_mutex_lock(&_mutex);
+		
 		vector<entity*>::iterator it;
 		
 		for(it=_entities.begin();it!=_entities.end();++it)
@@ -231,8 +268,11 @@ public:
 		
 		if(_cancel_thread)
 		{
+			pthread_mutex_unlock(&_mutex);
 			pthread_exit(NULL);
 		}
+		
+		pthread_mutex_unlock(&_mutex);
 	}
 	
 };

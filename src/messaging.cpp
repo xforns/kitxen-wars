@@ -31,6 +31,8 @@ void *messaging::t_add(void *vobject)
 	_observers.push_back( object );
 	
 	pthread_mutex_unlock(&_mutex);
+	
+	pthread_exit(NULL);
 }
 
 
@@ -67,6 +69,8 @@ void *messaging::t_remove(void *vobject)
 	}
 	
 	pthread_mutex_unlock(&_mutex);
+	
+	pthread_exit(NULL);
 }
 
 
@@ -111,6 +115,8 @@ void *messaging::t_notify(void *vobject)
 	}
 	
 	pthread_mutex_unlock(&_mutex);
+	
+	pthread_exit(NULL);
 }
 
 /****************************************************************
