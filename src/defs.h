@@ -48,8 +48,8 @@ struct observable_data {
 
 struct pt {
 	
-	unsigned int x;
-	unsigned int y;
+	double x;
+	double y;
 };
 
 enum entity_type { TYPE_NONE , TYPE_CHARACTER, TYPE_ENEMY, TYPE_BULLET, TYPE_BOMB };

@@ -16,8 +16,6 @@ class character : public entity, public observer
 
 private:
 	
-	pt _pos;
-	long _id;
 	GLuint _bg;
 	
 public:

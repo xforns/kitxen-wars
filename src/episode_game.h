@@ -2,6 +2,7 @@
 #define EPISODE_GAME_H
 
 #include <OpenGL/OpenGL.h>
+#include <deque>
 #include <map>
 #include <string>
 #include <cstdio>
@@ -14,6 +15,7 @@
 #include "messaging.h"
 #include "observer.h"
 #include "character.h"
+#include "bullet.h"
 #include "collision_system.h"
 
 using namespace std;
@@ -31,10 +33,14 @@ private:
 	
 	character _character;
 	
+	deque <bullet*> _bullets;
+	
+	unsigned int _add_bullets;
 	
 	void draw_bg();
 	void draw_main_character();
 	void draw_enemies();
+	void draw_bullets();
 	
 public:
 	

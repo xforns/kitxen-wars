@@ -25,6 +25,16 @@ public:
 	
 	entity_type type();
 	
+	void x(double x)
+	{
+		_pos.x = x;
+	}
+	
+	void y(double y)
+	{
+		_pos.y = y;
+	}
+	
 	double x()
 	{
 		return _pos.x;
@@ -43,6 +53,16 @@ public:
 	double yh()
 	{
 		return _pos.y + _h;
+	}
+	
+	double cx()
+	{
+		return _pos.x + _w/2;
+	}
+	
+	double cy()
+	{
+		return _pos.y + _h/2;
 	}
 	
 };

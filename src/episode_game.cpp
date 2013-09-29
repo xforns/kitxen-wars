@@ -33,6 +33,8 @@ void episode_game::start()
 	_bg_y1 = 0.f;
 	_bg_y2 = 200.f;
 	
+	_add_bullets = 0;
+	
 	_last_clock = clock();
 	
 	_character.start();
@@ -74,7 +76,23 @@ void episode_game::update()
 		
 		
 		// character bullets logic
+		while(_add_bullets>0)
+		{
+			bullet *obj = new bullet();
+			obj->x(_character.cx());
+			obj->y(_character.yh());
+			obj->start();
+			_bullets.push_back(obj);
+			
+			_add_bullets--;
+		}
 		
+		deque <bullet*>::iterator it = _bullets.begin();
+		while(it!=_bullets.end())
+		{
+			bullet *obj = *(it++);
+			obj->update();
+		}
 		
 		// enemies bullets logic
 		
@@ -102,6 +120,8 @@ void episode_game::draw()
     draw_enemies();
 	
 	draw_main_character();
+	
+	draw_bullets();
 	
 	glDisable(GL_BLEND);
 }
@@ -161,6 +181,18 @@ void episode_game::draw_enemies()
 }
 
 
+void episode_game::draw_bullets()
+{
+	deque <bullet*>::iterator it = _bullets.begin();
+	while(it!=_bullets.end())
+	{
+		bullet *obj = *(it++);
+		obj->draw();
+		
+	}
+}
+
+
 /****************************************************************
 
 						observer interface
@@ -172,12 +204,22 @@ void episode_game::update(const observable_data &param)
 {
 	if(param.msg_type==MSG_MOUSE)
 	{
+		// go back to main menu
 		if(param.a==LMB_PRESSED)
 		{
 			observable_data data;
 			data.msg_type = MSG_EPISODE;
 			data.a = EPISODE_MENU;
 			messaging::getInstance().notify(data);
+		}
+	}
+	else if(param.msg_type==MSG_KEYBOARD_S || param.msg_type==MSG_KEYBOARD)
+	{
+		// new bullet
+		if(param.a==32)
+		{
+			std::cout << "Adding new bullet" << std::endl << std::flush;
+			_add_bullets++;
 		}
 	}
 }

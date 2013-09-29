@@ -67,7 +67,10 @@ void mouse(int button, int state, int x, int y)
 
 void keyPressed(unsigned char key, int x, int y)
 {
-	
+	observable_data data;
+	data.msg_type = MSG_KEYBOARD;
+	data.a = key;
+	messaging::getInstance().notify(data);
 }
 
 

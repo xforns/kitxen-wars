@@ -27,7 +27,7 @@ void episodes::start()
 	
 	// load initial episode
 	//load(SPLASH);
-	_next_episode = SPLASH;
+	_next_episode = MENU;
 	load(MENU);
 }
 

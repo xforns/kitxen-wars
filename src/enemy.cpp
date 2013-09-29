@@ -1,4 +1,4 @@
-#include "character.h"
+#include "enemy.h"
 
 
 /****************************************************************
@@ -8,7 +8,7 @@
 ****************************************************************/
 
 
-character::character()
+enemy::enemy()
 {
 	_type = TYPE_CHARACTER;
 	
@@ -16,36 +16,33 @@ character::character()
 	
 	_pos.x = 160.f;
 	_pos.y = 50.f;
-	
-	_w = 40;
-	_h = 40;
 }
 
 
-character::~character()
+enemy::~enemy()
 {
 }
 
 
-void character::start()
+void enemy::start()
 {
 	messaging::getInstance().add(this);
 }
 
 
-void character::stop()
+void enemy::stop()
 {
 	messaging::getInstance().remove(this);
 	
 	asset_helper::getInstance().unload_texture(asset_helper::CHARACTER);
 }
 
-void character::update()
+void enemy::update()
 {
 }
 
 
-void character::draw()
+void enemy::draw()
 {
 	glPushMatrix();
 	
@@ -74,30 +71,8 @@ void character::draw()
 ****************************************************************/
 
 
-void character::update(const observable_data &param)
+void enemy::update(const observable_data &param)
 {
-	if(param.msg_type==MSG_KEYBOARD_S)
-	{
-		switch(param.a)
-		{
-			// left
-			case 100:
-				_pos.x -= 8;
-				break;
-			// right
-			case 102:
-				_pos.x += 8;
-				break;
-			// down
-			case 103:
-				_pos.y -= 4;
-				break;
-			// up
-			case 101:
-				_pos.y += 4;
-				break;
-		}
-	}
 }
 
 
