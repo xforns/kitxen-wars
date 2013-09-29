@@ -17,11 +17,16 @@ class messaging
 
 private:
 	
+	static vector<observer*> _observers;
+	static pthread_mutex_t _mutex;
+	
+	
 	messaging();
 	~messaging();
 	
-	static vector<observer*> _observers;
-	static pthread_mutex_t _mutex;
+	static void *t_add(void *vobject);
+	static void *t_remove(void *vobject);
+	static void *t_notify(void *vobject);
 	
 public:
 	
@@ -33,13 +38,8 @@ public:
 	}
 	
 	void add(observer *object);
-	static void *t_add(void *vobject);
-	
 	void remove(observer *object);
-	static void *t_remove(void *vobject);
-	
 	void notify(const observable_data &t);
-	static void *t_notify(void *vobject);
 		
 };
 
