@@ -3,6 +3,7 @@
 
 #include <OpenGL/OpenGL.h>
 #include <deque>
+#include <vector>
 #include <map>
 #include <string>
 #include <cstdio>
@@ -16,6 +17,7 @@
 #include "observer.h"
 #include "character.h"
 #include "bullet.h"
+#include "enemy.h"
 #include "collision_system.h"
 
 using namespace std;
@@ -25,17 +27,18 @@ class episode_game : public episode, public observer
 
 private:
 	
-	GLuint _bg1, _bg2;
-	
 	clock_t _last_clock;
 	
+	GLuint _bg1, _bg2;
 	double _bg_y1, _bg_y2;
 	
-	character _character;
-	
+	character *_character;
 	deque <bullet*> _bullets;
+	vector <enemy*> _enemies;
 	
 	unsigned int _add_bullets;
+	
+	collision_system _collision_system;
 	
 	void draw_bg();
 	void draw_main_character();

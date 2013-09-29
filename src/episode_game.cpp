@@ -37,13 +37,21 @@ void episode_game::start()
 	
 	_last_clock = clock();
 	
-	_character.start();
+	_character = new character();
+	_character->start();
+	
+	_collision_system.set_bounds(0,0,320,200);
+	_collision_system.start();
+	
+	_collision_system.add(_character);
 }
 
 
 void episode_game::stop()
 {
-	_character.stop();
+	_collision_system.stop();
+	
+	_character->stop();
 	
 	messaging::getInstance().remove(this);
 	
@@ -79,8 +87,8 @@ void episode_game::update()
 		while(_add_bullets>0)
 		{
 			bullet *obj = new bullet();
-			obj->x(_character.cx());
-			obj->y(_character.yh());
+			obj->x(_character->cx());
+			obj->y(_character->yh());
 			obj->start();
 			_bullets.push_back(obj);
 			
@@ -103,7 +111,7 @@ void episode_game::update()
 		_last_clock = clock();
 	}
 	
-	_character.update();
+	_character->update();
 }
 
 
@@ -171,7 +179,7 @@ void episode_game::draw_bg()
 
 void episode_game::draw_main_character()
 {
-	_character.draw();
+	_character->draw();
 }
 
 
@@ -218,9 +226,11 @@ void episode_game::update(const observable_data &param)
 		// new bullet
 		if(param.a==32)
 		{
-			std::cout << "Adding new bullet" << std::endl << std::flush;
 			_add_bullets++;
 		}
+	}
+	else if(param.msg_type==MSG_COLLISION)
+	{
 	}
 }
 

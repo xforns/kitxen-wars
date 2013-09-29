@@ -98,6 +98,29 @@ void character::update(const observable_data &param)
 				break;
 		}
 	}
+	else if(param.msg_type==MSG_COLLISION)
+	{
+		// bounds check
+		if(param.b==TYPE_NONE)
+		{
+			if(param.c==COLLISION_LEFT)
+			{
+				_pos.x++;
+			}
+			else if(param.c==COLLISION_RIGHT)
+			{
+				_pos.x--;
+			}
+			else if(param.c==COLLISION_TOP)
+			{
+				_pos.y--;
+			}
+			else if(param.c==COLLISION_BOTTOM)
+			{
+				_pos.y++;
+			}
+		}
+	}
 }
 
 
