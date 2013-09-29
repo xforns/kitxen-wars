@@ -10,6 +10,8 @@
 
 character::character()
 {
+	_type = TYPE_CHARACTER;
+	
 	_bg = asset_helper::getInstance().get_texture(asset_helper::CHARACTER);
 	
 	_pos.x = 160.f;

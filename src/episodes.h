@@ -24,6 +24,9 @@ class episodes : public observer
 private:
 	
 	enum _episode_defs { SPLASH, MENU, GAME, HELP, END };
+	enum _status { STATUS_PLAYING, STATUS_END };
+	
+	_status _current_status;
 	
 	_episode_defs _current_episode_def;
 	_episode_defs _next_episode;
@@ -42,6 +45,8 @@ public:
 	void start();
 	void glutDisplayFunc();
 	void glutReshapeFunc(int w, int h);
+	
+	bool hasFinished();
 	
 	virtual void update(const observable_data &param);
 		 

@@ -21,12 +21,13 @@ episodes::~episodes()
 
 void episodes::start()
 {
+	_current_status = STATUS_PLAYING;
 	
 	messaging::getInstance().add(this);
 	
 	// load initial episode
 	//load(SPLASH);
-	_next_episode = MENU;
+	_next_episode = SPLASH;
 	load(MENU);
 }
 
@@ -44,6 +45,12 @@ void episodes::glutReshapeFunc(int w, int h)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
+}
+
+
+bool episodes::hasFinished()
+{
+	return _current_status==STATUS_END;
 }
 
 
@@ -84,7 +91,8 @@ void episodes::update(const observable_data &param)
 		{
 			_current_episode->stop();
 			delete _current_episode;
-			exit(1);
+			
+			_current_status = STATUS_END;
 		}
 	}
 }

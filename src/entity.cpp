@@ -10,22 +10,16 @@
 
 entity::entity()
 {
+	_type = TYPE_NONE;
 }
-
 
 entity::~entity()
 {
 }
 
-void entity::setId(long id)
+entity_type entity::type()
 {
-	_id = id;
-}
-
-
-long entity::getId()
-{
-	return _id;
+	return _type;
 }
 
 

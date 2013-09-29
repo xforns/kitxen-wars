@@ -9,7 +9,9 @@ class entity
 protected:
 	
 	pt _pos;
-	long _id;
+	double _w;
+	double _h;
+	entity_type _type;
 	
 public:
 	
@@ -21,8 +23,27 @@ public:
 	virtual void update()=0;
 	virtual void draw()=0;
 	
-	void setId(long id);
-	long getId();
+	entity_type type();
+	
+	double x()
+	{
+		return _pos.x;
+	}
+	
+	double y()
+	{
+		return _pos.y;
+	}
+	
+	double xw()
+	{
+		return _pos.x + _w;
+	}
+	
+	double yh()
+	{
+		return _pos.y + _h;
+	}
 	
 };
 

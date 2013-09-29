@@ -19,6 +19,7 @@
 #define MSG_EPISODE 1
 #define MSG_KEYBOARD 2
 #define MSG_KEYBOARD_S 3
+#define MSG_COLLISION 4
 
 #define EPISODE_SPLASH 0
 #define EPISODE_MENU 1
@@ -26,6 +27,13 @@
 #define EPISODE_HELP 3
 #define EPISODE_GAMEOVER 4
 #define EPISODE_EXIT 5
+
+#define COLLISION_NONE 0
+#define COLLISION_LEFT (1<<1)
+#define COLLISION_RIGHT (1<<3)
+#define COLLISION_TOP (1<<4)
+#define COLLISION_BOTTOM (1<<2)
+
 
 #include <string>
 
@@ -40,9 +48,11 @@ struct observable_data {
 
 struct pt {
 	
-	double x;
-	double y;
+	unsigned int x;
+	unsigned int y;
 };
+
+enum entity_type { TYPE_NONE , TYPE_CHARACTER, TYPE_ENEMY, TYPE_BULLET, TYPE_BOMB };
 
 
 #endif /* DEFS_H */

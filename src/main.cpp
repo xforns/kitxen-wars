@@ -12,6 +12,11 @@ void display(void)
 {
     
 	episodes.glutDisplayFunc();
+	
+	if(episodes.hasFinished())
+	{
+		exit(1);
+	}
 }
 
 
