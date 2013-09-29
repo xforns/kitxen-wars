@@ -1,6 +1,6 @@
 #include "messaging.h"
 
-bool messaging::_notifyInProgress;
+pthread_mutex_t messaging::_mutex;
 vector <observer*>messaging::_observers;
 
 /****************************************************************
@@ -12,30 +12,44 @@ vector <observer*>messaging::_observers;
 
 void messaging::add(observer *object)
 {
-	while(_notifyInProgress);
+	pthread_t thread;
+	pthread_create(&thread,NULL,&t_add,object);
+}
+
+
+void *messaging::t_add(void *vobject)
+{
+	observer *object = (observer *)vobject;
 	
-	_notifyInProgress = true;
+	pthread_mutex_lock(&_mutex);
 	
 	if(dynamic_cast<observer*>(object)==NULL)
 	{
-		return;
+		return NULL;
 	}
 	
 	_observers.push_back( object );
 	
-	_notifyInProgress = false;
+	pthread_mutex_unlock(&_mutex);
 }
 
 
 void messaging::remove(observer *object)
 {
-	while(_notifyInProgress);
+	pthread_t thread;
+	pthread_create(&thread,NULL,&t_remove,object);
+}
+
+
+void *messaging::t_remove(void *vobject)
+{
+	observer *object = (observer *)vobject;
 	
-	_notifyInProgress = true;
+	pthread_mutex_lock(&_mutex);
 	
 	if(dynamic_cast<observer*>(object)==NULL)
 	{
-		return;
+		return NULL;
 	}
 	
 	vector<observer*>::iterator it = _observers.begin();
@@ -52,7 +66,7 @@ void messaging::remove(observer *object)
 		++it;
 	}
 	
-	_notifyInProgress = false;
+	pthread_mutex_unlock(&_mutex);
 }
 
 
@@ -73,11 +87,9 @@ void messaging::notify(const observable_data &t)
 
 void *messaging::t_notify(void *vobject)
 {
-	while(_notifyInProgress);
+	pthread_mutex_lock(&_mutex);
 	
 	observable_data* t = (observable_data *)vobject;
-	
-	_notifyInProgress = true;
 	
 	vector<observer*>::iterator it;
 	
@@ -98,7 +110,7 @@ void *messaging::t_notify(void *vobject)
 		(*it)->update(*t);
 	}
 	
-	_notifyInProgress = false;
+	pthread_mutex_unlock(&_mutex);
 }
 
 /****************************************************************
@@ -110,10 +122,12 @@ void *messaging::t_notify(void *vobject)
 
 messaging::messaging()
 {
+	pthread_mutex_init(&_mutex, NULL);
 }
 
 
 messaging::~messaging()
 {
+	pthread_mutex_destroy(&_mutex);
 }
 
