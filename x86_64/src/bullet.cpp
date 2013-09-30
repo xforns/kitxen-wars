@@ -10,7 +10,7 @@
 
 bullet::bullet()
 {
-	_type = TYPE_CHARACTER;
+	_type = TYPE_BULLET;
 	
 	_bg = asset_helper::getInstance().get_texture(asset_helper::BULLET);
 	
@@ -27,6 +27,8 @@ bullet::~bullet()
 void bullet::start()
 {
 	messaging::getInstance().add(this);
+	
+	_die = false;
 }
 
 
@@ -35,6 +37,8 @@ void bullet::stop()
 	messaging::getInstance().remove(this);
 	
 	asset_helper::getInstance().unload_texture(asset_helper::BULLET);
+	
+	_die = true;
 }
 
 void bullet::update()
@@ -65,6 +69,17 @@ void bullet::draw()
 }
 
 
+bool bullet::is_dead()
+{
+	return _die;
+}
+
+
+void bullet::set_dead()
+{
+	_die = true;
+}
+
 /****************************************************************
 
 						observer interface
@@ -74,6 +89,15 @@ void bullet::draw()
 
 void bullet::update(const observable_data &param)
 {
+	// bounds check
+	if( (param.msg_type==MSG_COLLISION) && (param.a==TYPE_BULLET) && (param.b==TYPE_NONE) )
+	{
+		if(param.c==COLLISION_TOP)
+		{
+			_die = true;
+		}
+	}
+	
 }
 
 

@@ -34,6 +34,9 @@
 #define COLLISION_TOP (1<<4)
 #define COLLISION_BOTTOM (1<<2)
 
+// timesteps
+#define TIME_STEP_BG 5000
+
 
 #include <string>
 

@@ -15,6 +15,7 @@
 #include "defs.h"
 #include "messaging.h"
 #include "observer.h"
+#include "background_game.h"
 #include "character.h"
 #include "bullet.h"
 #include "enemy.h"
@@ -29,9 +30,7 @@ private:
 	
 	clock_t _last_clock;
 	
-	GLuint _bg1, _bg2;
-	double _bg_y1, _bg_y2;
-	
+	background_game _background;
 	character *_character;
 	deque <bullet*> _bullets;
 	vector <enemy*> _enemies;
@@ -40,10 +39,11 @@ private:
 	
 	collision_system _collision_system;
 	
-	void draw_bg();
 	void draw_main_character();
 	void draw_enemies();
 	void draw_bullets();
+	
+	void add_enemies(int batch);
 	
 public:
 	

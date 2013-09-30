@@ -25,6 +25,12 @@ public:
 	
 	entity_type type();
 	
+	void x_y(double x, double y)
+	{
+		_pos.x = x;
+		_pos.y = y;
+	}
+	
 	void x(double x)
 	{
 		_pos.x = x;

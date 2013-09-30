@@ -10,7 +10,7 @@
 
 enemy::enemy()
 {
-	_type = TYPE_CHARACTER;
+	_type = TYPE_ENEMY;
 	
 	_bg = asset_helper::getInstance().get_texture(asset_helper::ENEMY);
 }

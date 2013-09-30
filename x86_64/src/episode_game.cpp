@@ -27,15 +27,11 @@ void episode_game::start()
 	
 	messaging::getInstance().add(this);
 	
-	_bg1 = asset_helper::getInstance().get_texture(asset_helper::BG_1);
-	_bg2 = asset_helper::getInstance().get_texture(asset_helper::BG_2);
-	
-	_bg_y1 = 0.f;
-	_bg_y2 = 200.f;
-	
 	_add_bullets = 0;
 	
 	_last_clock = clock();
+	
+	_background.start();
 	
 	_character = new character();
 	_character->start();
@@ -50,6 +46,8 @@ void episode_game::start()
 void episode_game::stop()
 {
 	_collision_system.stop();
+	
+	_background.stop();
 	
 	_character->stop();
 	
@@ -73,32 +71,48 @@ void episode_game::update()
 	double diff = ( clock() - _last_clock );
 	if(diff>=TIME_STEP)
 	{
-		// background logic
-		_bg_y1 = _bg_y1<=-200.f ? 200.f : _bg_y1-1;
-		_bg_y2 = _bg_y2<=-200.f ? 200.f : _bg_y2-1;
-		
 		// main character logic
 		
 		
 		// enemies logic
 		
+		if(rand()%TIME_STEP>495)
+		{
+			add_enemies(1);
+		}
+		
+		vector <enemy *>::iterator ite = _enemies.begin();
+		while(ite!=_enemies.end())
+		{
+			enemy *obj = *(ite++);
+			obj->update();
+		}
 		
 		// character bullets logic
 		while(_add_bullets>0)
 		{
 			bullet *obj = new bullet();
-			obj->x(_character->cx());
-			obj->y(_character->yh());
+			obj->x_y(_character->cx(),_character->yh());
 			obj->start();
 			_bullets.push_back(obj);
+			
+			_collision_system.add(obj);
 			
 			_add_bullets--;
 		}
 		
-		deque <bullet*>::iterator it = _bullets.begin();
-		while(it!=_bullets.end())
+		deque <bullet*>::iterator itb = _bullets.begin();
+		while(itb!=_bullets.end())
 		{
-			bullet *obj = *(it++);
+			bullet *obj = *(itb++);
+			
+			// is bullet dead
+			if(obj->is_dead())
+			{ 
+				_collision_system.remove(obj);
+				_bullets.erase(itb--);
+				continue;
+			}
 			obj->update();
 		}
 		
@@ -119,7 +133,7 @@ void episode_game::draw()
 {
     glColor3f(1.f,1.f,1.f);
 	
-    draw_bg();
+    _background.draw();
 	
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
@@ -135,48 +149,6 @@ void episode_game::draw()
 }
 
 
-void episode_game::draw_bg()
-{
-	// bg 2
-	
-	glPushMatrix();
-	
-	glTranslatef(0.f,_bg_y2,0.f);
-	
-    glBindTexture(GL_TEXTURE_2D,_bg2);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);	
-	
-    glBegin(GL_QUADS);
-    glTexCoord2i(1,1); glVertex2i(320,200);	// top right
-    glTexCoord2i(1,0); glVertex2i(320,0);	// bottom right
-    glTexCoord2i(0,0); glVertex2i(0,0);		// bottom left
-    glTexCoord2i(0,1); glVertex2i(0,200);	// top left
-	glEnd();
-	
-	glPopMatrix();
-	
-	// bg 1
-	
-	glPushMatrix();
-	
-	glTranslatef(0.f,_bg_y1,0.f);
-	
-    glBindTexture(GL_TEXTURE_2D,_bg1);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);	
-	
-    glBegin(GL_QUADS);
-    glTexCoord2i(1,1); glVertex2i(320,200);	// top right
-    glTexCoord2i(1,0); glVertex2i(320,0);	// bottom right
-    glTexCoord2i(0,0); glVertex2i(0,0);		// bottom left
-    glTexCoord2i(0,1); glVertex2i(0,200);	// top left
-	glEnd();
-	
-	glPopMatrix();
-}
-
-
 void episode_game::draw_main_character()
 {
 	_character->draw();
@@ -185,7 +157,12 @@ void episode_game::draw_main_character()
 
 void episode_game::draw_enemies()
 {
-	
+	vector <enemy *>::iterator it = _enemies.begin();
+	while(it!=_enemies.end())
+	{
+		enemy *obj = *(it++);
+		obj->draw();
+	}
 }
 
 
@@ -231,6 +208,12 @@ void episode_game::update(const observable_data &param)
 	}
 	else if(param.msg_type==MSG_COLLISION)
 	{
+		// bullet to enemy collision
+		if( ( (param.a==TYPE_ENEMY) && (param.b==TYPE_BULLET) )
+			|| ( (param.a==TYPE_BULLET) && (param.b==TYPE_ENEMY) ) )
+		{
+			cout << "Enemy dead!" << endl << flush;
+		}
 	}
 }
 
@@ -241,4 +224,21 @@ void episode_game::update(const observable_data &param)
 
 ****************************************************************/
 
+
+void episode_game::add_enemies(int batch)
+{
+	unsigned int xmin = 50, xmax = 250;
+	unsigned int ymin = 120, ymax = 140;
+	
+	for(int i=0;i<batch;i++)
+	{
+		unsigned int x = rand() % xmax + xmin;
+		unsigned int y = rand() % ymax + ymin;
+		
+		enemy *object = new enemy();
+		object->x_y(x,y);
+		object->start();
+		_enemies.push_back(object);
+	}
+}
 
