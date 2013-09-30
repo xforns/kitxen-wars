@@ -12,10 +12,7 @@ enemy::enemy()
 {
 	_type = TYPE_CHARACTER;
 	
-	_bg = asset_helper::getInstance().get_texture(asset_helper::CHARACTER);
-	
-	_pos.x = 160.f;
-	_pos.y = 50.f;
+	_bg = asset_helper::getInstance().get_texture(asset_helper::ENEMY);
 }
 
 
@@ -34,7 +31,7 @@ void enemy::stop()
 {
 	messaging::getInstance().remove(this);
 	
-	asset_helper::getInstance().unload_texture(asset_helper::CHARACTER);
+	asset_helper::getInstance().unload_texture(asset_helper::ENEMY);
 }
 
 void enemy::update()

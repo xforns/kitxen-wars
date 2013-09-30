@@ -18,7 +18,7 @@ public:
 	enum _asset_status { UNLOADED, LOADED, FAIL_LOADING, FAIL_UNLOADING };
 	
 	enum _asset_defs { SPLASH_COMPANY, SPLASH_PRESENTS, SPLASH_GAME, BG_1, BG_2, 
-							CHARACTER, BULLET, BAD_GUY, EXPLOSION, MENU, BOMB, 
+							CHARACTER, BULLET, ENEMY, EXPLOSION, MENU, BOMB, 
 							ENERGY, HELP, END_FAIL, END_SUCCESS }; 
 	
 private:
@@ -102,21 +102,21 @@ private:
 		
 		// set filenames
 		_filenames = map<_asset_defs,string>();
-		_filenames.insert( pair<_asset_defs,string>(SPLASH_COMPANY,"assets/ok52.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(SPLASH_PRESENTS,"assets/presents.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(SPLASH_GAME,"assets/portada.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(BG_1,"assets/coc1.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(BG_2,"assets/coc2.bmp") ); 
-		_filenames.insert( pair<_asset_defs,string>(CHARACTER,"assets/mio.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(BULLET,"assets/disp.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(BAD_GUY,"assets/malo.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(EXPLOSION,"assets/explos.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(MENU,"assets/menu2.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(BOMB,"assets/gran.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(ENERGY,"assets/energy.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(HELP,"assets/help.bmp") );
-		/*_filenames.insert( pair<_asset_defs,string>(END_FAIL,"assets/.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(END_SUCCESS,"assets/.bmp") );*/
+		_filenames.insert( pair<_asset_defs,string>(SPLASH_COMPANY,"../assets/ok52.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(SPLASH_PRESENTS,"../assets/presents.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(SPLASH_GAME,"../assets/portada.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(BG_1,"../assets/coc1.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(BG_2,"../assets/coc2.bmp") ); 
+		_filenames.insert( pair<_asset_defs,string>(CHARACTER,"../assets/mio.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(BULLET,"../assets/disp.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(ENEMY,"../assets/malo.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(EXPLOSION,"../assets/explos.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(MENU,"../assets/menu2.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(BOMB,"../assets/gran.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(ENERGY,"../assets/energy.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(HELP,"../assets/help.bmp") );
+		/*_filenames.insert( pair<_asset_defs,string>(END_FAIL,"../assets/.bmp") );
+		_filenames.insert( pair<_asset_defs,string>(END_SUCCESS,"../assets/.bmp") );*/
 		
 		_textures = map<_asset_defs,GLuint>();
 	}
