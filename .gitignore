@@ -9,3 +9,16 @@ obj/messaging.o
 episode_game.o
 obj/character.o
 obj/entity.o
+x86_64/obj/bomb.o
+x86_64/obj/bullet.o
+x86_64/obj/character.o
+x86_64/obj/collision_system.o
+x86_64/obj/enemy.o
+x86_64/obj/entity.o
+x86_64/obj/episode.o
+x86_64/obj/episode_help.o
+x86_64/obj/episode_menu.o
+x86_64/obj/episode_splash.o
+x86_64/obj/episodes.o
+x86_64/obj/main.o
+x86_64/obj/messaging.o
