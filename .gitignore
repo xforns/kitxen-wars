@@ -22,3 +22,4 @@ x86_64/obj/episode_splash.o
 x86_64/obj/episodes.o
 x86_64/obj/main.o
 x86_64/obj/messaging.o
+background_game.o
