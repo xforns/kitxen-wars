@@ -33,13 +33,12 @@ void episode_game::start()
 	
 	_background.start();
 	
-	_character = new character();
-	_character->start();
+	_character->get()->start();
 	
 	_collision_system.set_bounds(0,0,320,200);
 	_collision_system.start();
 	
-	_collision_system.add(_character);
+	_collision_system.add(_character->get());
 }
 
 
@@ -49,7 +48,7 @@ void episode_game::stop()
 	
 	_background.stop();
 	
-	_character->stop();
+	_character->get()->stop();
 	
 	messaging::getInstance().remove(this);
 	
@@ -92,7 +91,7 @@ void episode_game::update()
 		while(_add_bullets>0)
 		{
 			bullet *obj = new bullet();
-			obj->x_y(_character->cx(),_character->yh());
+			obj->x_y(_character->get()->cx(),_character->get()->yh());
 			obj->start();
 			_bullets.push_back(obj);
 			
@@ -125,7 +124,7 @@ void episode_game::update()
 		_last_clock = clock();
 	}
 	
-	_character->update();
+	_character->get()->update();
 }
 
 
@@ -151,7 +150,7 @@ void episode_game::draw()
 
 void episode_game::draw_main_character()
 {
-	_character->draw();
+	_character->get()->draw();
 }
 
 
@@ -208,6 +207,7 @@ void episode_game::update(const observable_data &param)
 	}
 	else if(param.msg_type==MSG_COLLISION)
 	{
+		cout << "Collision! " << param.a << " - " << param.b << endl << flush;
 		// bullet to enemy collision
 		if( ( (param.a==TYPE_ENEMY) && (param.b==TYPE_BULLET) )
 			|| ( (param.a==TYPE_BULLET) && (param.b==TYPE_ENEMY) ) )
@@ -227,6 +227,9 @@ void episode_game::update(const observable_data &param)
 
 void episode_game::add_enemies(int batch)
 {
+	shared_ptr<enemy> object;
+	return;
+	
 	unsigned int xmin = 50, xmax = 250;
 	unsigned int ymin = 120, ymax = 140;
 	
@@ -239,6 +242,7 @@ void episode_game::add_enemies(int batch)
 		object->x_y(x,y);
 		object->start();
 		_enemies.push_back(object);
+		_collision_system.add(object);
 	}
 }
 

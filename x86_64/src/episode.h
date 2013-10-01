@@ -20,7 +20,7 @@ public:
 	_episode_status _current_episode_status;
 	
 	episode();
-	~episode();
+	virtual ~episode();
 	
 	virtual void start();
 	virtual void stop();

@@ -157,28 +157,28 @@ void *collision_system::t_update(void *)
 					continue;
 				}
 				entity *object2 = *it2;
-			
+				
 				unsigned int collision = is_collision(object,object2);
+				
 				// if collision, notify possible receptors
 				if(collision!=COLLISION_NONE)
 				{
 					observable_data data;
 					data.msg_type = MSG_COLLISION;
 					data.a = object->type();
-					data.b = object->type();
+					data.b = object2->type();
 					data.c = collision;
 					messaging::getInstance().notify(data);
 				}
 			}
 		}
 	
+		pthread_mutex_unlock(&_mutex);
+		
 		if(_cancel_thread)
 		{
-			pthread_mutex_unlock(&_mutex);
 			pthread_exit(NULL);
 		}
-	
-		pthread_mutex_unlock(&_mutex);
 	}
 }
 
@@ -190,6 +190,10 @@ unsigned int collision_system::is_collision(entity *obj, entity *obj2)
 	all_axis.push_back( vec2(0,1).unit() );
 	
 	// check for both axis
+	
+	bool collision = true;
+	double diff_axis_x = 0.f, diff_axis_y = 0.f;
+	unsigned int horizontal_collision, vertical_collision;
 	
 	vector <vec2>::iterator all_it;
 	for(all_it=all_axis.begin();all_it!=all_axis.end();++all_it)
@@ -237,16 +241,47 @@ unsigned int collision_system::is_collision(entity *obj, entity *obj2)
 		}
 	
 		// check whether these segments collide
-	
-		if( ( obj2_min >= obj1_min ) && ( obj2_min <= obj1_max ) )
-		{
-			return axis_x ? COLLISION_LEFT : COLLISION_BOTTOM;
-		}
-		else if( ( obj1_min >= obj2_min ) && ( obj1_min <= obj2_max ) )
-		{
-			return axis_x ? COLLISION_RIGHT : COLLISION_TOP;
-		}
 		
+		if( ( obj1_max >= obj2_min ) && ( obj1_max <= obj2_max ) ) 
+		{
+			collision &= true;
+			
+			if(axis_x)
+			{
+				diff_axis_x = obj2_max - obj1_min;
+				horizontal_collision = COLLISION_RIGHT;
+			}
+			else
+			{
+				diff_axis_y = obj2_max - obj1_min;
+				vertical_collision = COLLISION_BOTTOM;
+			}
+		}
+		else if( ( obj2_max >= obj1_min ) && ( obj2_max <= obj1_max ) )
+		{
+			collision &= true;
+			
+			if(axis_x)
+			{
+				diff_axis_x = obj1_max - obj2_min;
+				horizontal_collision = COLLISION_LEFT;
+			}
+			else
+			{
+				diff_axis_y = obj1_max - obj2_min;
+				vertical_collision = COLLISION_TOP;
+			}
+		}
+		else
+		{
+			collision &= false;
+		}
+	}
+	
+	if(collision)
+	{
+		return diff_axis_x >= diff_axis_y ? horizontal_collision : vertical_collision;
+						
 	}
 	
 	return COLLISION_NONE;

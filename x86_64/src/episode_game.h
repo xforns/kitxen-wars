@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <ctime>
 #include <iostream>
+#include <memory>
 
 #include "episode.h"
 #include "asset_helper.h"
@@ -28,10 +29,14 @@ class episode_game : public episode, public observer
 
 private:
 	
+	typedef shared_ptr<bullet> bullet_ptr;
+	typedef shared_ptr<character> character_ptr;
+	typedef shared_ptr<enemy> enemy_ptr;
+	
 	clock_t _last_clock;
 	
 	background_game _background;
-	character *_character;
+	character_ptr *_character;
 	deque <bullet*> _bullets;
 	vector <enemy*> _enemies;
 	

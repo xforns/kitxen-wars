@@ -56,7 +56,7 @@ void *background_game::t_update(void *)
 	while(true)
 	{
 		double diff = ( clock() - _last_clock );
-		if(diff>=TIME_STEP)
+		if(diff>=TIME_STEP_BG)
 		{
 			_bg_y1 = _bg_y1<=-200.f ? 200.f : _bg_y1-1;
 			_bg_y2 = _bg_y2<=-200.f ? 200.f : _bg_y2-1;

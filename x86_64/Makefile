@@ -4,8 +4,8 @@ LIB_DIR = lib/
 
 CPP_FILES := $(wildcard src/*.cpp)
 OBJECT_FILES := $(addprefix obj/,$(notdir $(CPP_FILES:.cpp=.o)))
-CC = g++
-CFLAGS = -Wall -Wextra -ggdb -O0
+CC = clang++
+CFLAGS = -stdlib=libc++ -Weverything -Wextra -ggdb -O0
 LDFLAGS= -framework GLUT -framework OpenGL -framework Cocoa -lpthread
 TARGET = kitxen
 
@@ -16,7 +16,7 @@ $(TARGET): $(OBJECT_FILES)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(INC_PATH) $(LIB_PATH) $^ -o $(TARGET) 
 
 obj/%.o: src/%.cpp
-	g++ $(CC_FLAGS) -c -ggdb -o $@ $<
+	$(CC) $(CC_FLAGS) -c -std=c++11 -stdlib=libc++ -o $@ $<
 
 clean:
 	rm -f $(TARGET) $(OBJECT_FILES) *~
