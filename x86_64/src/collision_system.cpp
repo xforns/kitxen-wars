@@ -1,7 +1,7 @@
 #include "collision_system.h"
 
 int collision_system::_bound_x1, collision_system::_bound_x2, collision_system::_bound_y1, collision_system::_bound_y2;
-vector <entity*> collision_system::_entities;
+vector <entity_ptr> collision_system::_entities;
 bool collision_system::_cancel_thread;
 pthread_mutex_t collision_system::_mutex;
 
@@ -21,14 +21,15 @@ void collision_system::start()
 	
 	pthread_mutex_init(&_mutex, NULL);
 	
-	pthread_t thread;
-	pthread_create(&thread,NULL,&t_update,NULL);
+	pthread_create(&_thread_update,NULL,&t_update,NULL);
 }
 
 
 void collision_system::stop()
 {
 	_cancel_thread = true;
+	
+	pthread_join(_thread_update,NULL);
 	
 	pthread_mutex_destroy(&_mutex);
 }
@@ -49,60 +50,23 @@ void collision_system::set_bounds(int x1, int y1, int x2, int y2)
 }
 
 
-void collision_system::add(entity *object)
-{
-	pthread_t thread;
-	pthread_create(&thread,NULL,&t_add,object);
-}
-
-
-void *collision_system::t_add(void *vobject)
+void collision_system::add(entity_ptr ptr)
 {
 	pthread_mutex_lock(&_mutex);
 	
-	entity *object = (entity *)vobject;
-	
-	if(dynamic_cast<entity*>(object)==NULL)
-	{
-		return NULL;
-	}
-	
-	_entities.push_back(object);
+	_entities.push_back(ptr);
 	
 	pthread_mutex_unlock(&_mutex);
-	
-	pthread_exit(NULL);
 }
 
 
-void collision_system::remove(entity *object)
-{
-	pthread_t thread;
-	pthread_create(&thread,NULL,&t_remove,object);
-}
-
-
-void *collision_system::t_remove(void *vobject)
+void collision_system::remove(entity_ptr ptr)
 {
 	pthread_mutex_lock(&_mutex);
 	
-	entity *object = (entity *)vobject;
-	
-	if(dynamic_cast<entity*>(object)==NULL)
-	{
-		return NULL;
-	}
-	
-	vector<entity*>::iterator it = find(_entities.begin(),_entities.end(),object);
-	if(it==_entities.end())
-	{
-		return NULL;
-	}
-	_entities.erase(it);
+	_entities.erase(remove_if(_entities.begin(),_entities.end(),ptr_contains(ptr.get())));
 	
 	pthread_mutex_unlock(&_mutex);
-	
-	pthread_exit(NULL);
 }
 
 
@@ -112,11 +76,9 @@ void *collision_system::t_update(void *)
 	{
 		pthread_mutex_lock(&_mutex);
 	
-		vector<entity*>::iterator it;
-	
-		for(it=_entities.begin();it!=_entities.end();++it)
+		for(auto it=_entities.begin();it!=_entities.end();++it)
 		{
-			entity *object = *it;
+			entity *object = (*it).get();
 			
 			// bounds check
 			unsigned int collision = COLLISION_NONE;
@@ -149,14 +111,14 @@ void *collision_system::t_update(void *)
 		
 			// enemies, fire against enemies, fire against character and bomb collisions
 		
-			vector<entity*>::iterator it2;
-			for(it2=_entities.begin();it2!=_entities.end();++it2)
+			for(auto it2=_entities.begin();it2!=_entities.end();++it2)
 			{
-				if(*it==*it2)
+				entity_ptr ptr2 = *it2;
+				if((*it).get()==ptr2.get())
 				{
 					continue;
 				}
-				entity *object2 = *it2;
+				entity *object2 = ptr2.get();
 				
 				unsigned int collision = is_collision(object,object2);
 				
@@ -172,11 +134,12 @@ void *collision_system::t_update(void *)
 				}
 			}
 		}
-	
+		
 		pthread_mutex_unlock(&_mutex);
 		
 		if(_cancel_thread)
 		{
+			finalize();
 			pthread_exit(NULL);
 		}
 	}
@@ -195,8 +158,7 @@ unsigned int collision_system::is_collision(entity *obj, entity *obj2)
 	double diff_axis_x = 0.f, diff_axis_y = 0.f;
 	unsigned int horizontal_collision, vertical_collision;
 	
-	vector <vec2>::iterator all_it;
-	for(all_it=all_axis.begin();all_it!=all_axis.end();++all_it)
+	for(auto all_it=all_axis.begin();all_it!=all_axis.end();++all_it)
 	{
 		vec2 axis = *all_it;
 		
@@ -219,8 +181,7 @@ unsigned int collision_system::is_collision(entity *obj, entity *obj2)
 		// get max and min for each projected object
 	
 		double obj1_min = numeric_limits<float>::max(), obj1_max = -obj1_min;
-		vector <vec2>::iterator it;
-		for(it=proj1.begin();it!=proj1.end();++it)
+		for(auto it=proj1.begin();it!=proj1.end();++it)
 		{
 			vec2 vobj = *it;
 			
@@ -230,7 +191,7 @@ unsigned int collision_system::is_collision(entity *obj, entity *obj2)
 		}
 	
 		double obj2_min = numeric_limits<float>::max(), obj2_max = -obj1_min;
-		for(it=proj2.begin();it!=proj2.end();++it)
+		for(auto it=proj2.begin();it!=proj2.end();++it)
 		{
 			vec2 vobj = *it;
 		
@@ -286,4 +247,11 @@ unsigned int collision_system::is_collision(entity *obj, entity *obj2)
 	
 	return COLLISION_NONE;
 }
+
+
+void collision_system::finalize()
+{
+	_entities.clear();
+}
+
 

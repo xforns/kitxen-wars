@@ -2,7 +2,6 @@
 #define EPISODE_GAME_H
 
 #include <OpenGL/OpenGL.h>
-#include <deque>
 #include <vector>
 #include <map>
 #include <string>
@@ -36,9 +35,10 @@ private:
 	clock_t _last_clock;
 	
 	background_game _background;
-	character_ptr *_character;
-	deque <bullet*> _bullets;
-	vector <enemy*> _enemies;
+	
+	character_ptr _character;
+	vector <bullet_ptr> _bullets;
+	vector <enemy_ptr> _enemies;
 	
 	unsigned int _add_bullets;
 	

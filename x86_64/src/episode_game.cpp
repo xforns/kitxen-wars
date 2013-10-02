@@ -33,27 +33,45 @@ void episode_game::start()
 	
 	_background.start();
 	
-	_character->get()->start();
+	_character = make_shared<character>();
+	_character.get()->start();
 	
 	_collision_system.set_bounds(0,0,320,200);
 	_collision_system.start();
 	
-	_collision_system.add(_character->get());
+	_collision_system.add(_character);
 }
 
 
 void episode_game::stop()
 {
-	_collision_system.stop();
-	
+	// bg
 	_background.stop();
 	
-	_character->get()->stop();
+	// character
+	_character.get()->stop();
 	
+	_collision_system.remove(_character);
+	
+	// enemies
+	std::for_each( _enemies.begin(), _enemies.end(), [](shared_ptr<enemy> obj)
+		{
+			obj.get()->stop();
+		});
+	_enemies.clear();
+	
+	// bullets
+	std::for_each( _bullets.begin(), _bullets.end(), [](shared_ptr<bullet> obj)
+		{
+			obj.get()->stop();
+		});
+	_bullets.clear();
+	
+	// collision system
+	_collision_system.stop();
+	
+	// messaging
 	messaging::getInstance().remove(this);
-	
-	asset_helper::getInstance().unload_texture(asset_helper::BG_1);
-	asset_helper::getInstance().unload_texture(asset_helper::BG_2);
 	
 	episode::stop();
 }
@@ -80,38 +98,44 @@ void episode_game::update()
 			add_enemies(1);
 		}
 		
-		vector <enemy *>::iterator ite = _enemies.begin();
+		auto ite = _enemies.begin();
 		while(ite!=_enemies.end())
 		{
-			enemy *obj = *(ite++);
+			enemy_ptr ptr = *(ite++);
+			enemy *obj = ptr.get();
 			obj->update();
 		}
 		
 		// character bullets logic
 		while(_add_bullets>0)
 		{
-			bullet *obj = new bullet();
-			obj->x_y(_character->get()->cx(),_character->get()->yh());
-			obj->start();
-			_bullets.push_back(obj);
+			bullet_ptr obj_ptr = make_shared<bullet>();
+			obj_ptr.get()->x_y(_character.get()->cx(),_character.get()->yh());
+			obj_ptr.get()->start();
 			
-			_collision_system.add(obj);
+			_bullets.push_back(obj_ptr);
+			_collision_system.add(obj_ptr);
 			
 			_add_bullets--;
 		}
 		
-		deque <bullet*>::iterator itb = _bullets.begin();
+		auto itb = _bullets.begin();
 		while(itb!=_bullets.end())
 		{
-			bullet *obj = *(itb++);
+			bullet_ptr ptr = *(itb);
+			bullet *obj = ptr.get();
 			
 			// is bullet dead
 			if(obj->is_dead())
 			{ 
-				_collision_system.remove(obj);
-				_bullets.erase(itb--);
+				obj->stop();
+				_collision_system.remove(ptr);
+				_bullets.erase(remove_if(_bullets.begin(),_bullets.end(),ptr_contains(ptr.get())));
+				
 				continue;
 			}
+			itb++;
+			
 			obj->update();
 		}
 		
@@ -124,7 +148,7 @@ void episode_game::update()
 		_last_clock = clock();
 	}
 	
-	_character->get()->update();
+	_character.get()->update();
 }
 
 
@@ -150,16 +174,17 @@ void episode_game::draw()
 
 void episode_game::draw_main_character()
 {
-	_character->get()->draw();
+	_character.get()->draw();
 }
 
 
 void episode_game::draw_enemies()
 {
-	vector <enemy *>::iterator it = _enemies.begin();
+	auto it = _enemies.begin();
 	while(it!=_enemies.end())
 	{
-		enemy *obj = *(it++);
+		enemy_ptr ptr = *(it++);
+		enemy *obj = ptr.get();
 		obj->draw();
 	}
 }
@@ -167,10 +192,11 @@ void episode_game::draw_enemies()
 
 void episode_game::draw_bullets()
 {
-	deque <bullet*>::iterator it = _bullets.begin();
+	auto it = _bullets.begin();
 	while(it!=_bullets.end())
 	{
-		bullet *obj = *(it++);
+		bullet_ptr ptr = *(it++);
+		bullet *obj = ptr.get();
 		obj->draw();
 		
 	}
@@ -207,12 +233,12 @@ void episode_game::update(const observable_data &param)
 	}
 	else if(param.msg_type==MSG_COLLISION)
 	{
-		cout << "Collision! " << param.a << " - " << param.b << endl << flush;
+		//cout << "Collision! " << param.a << " - " << param.b << endl << flush;
 		// bullet to enemy collision
 		if( ( (param.a==TYPE_ENEMY) && (param.b==TYPE_BULLET) )
 			|| ( (param.a==TYPE_BULLET) && (param.b==TYPE_ENEMY) ) )
 		{
-			cout << "Enemy dead!" << endl << flush;
+			//cout << "Enemy dead!" << endl << flush;
 		}
 	}
 }
@@ -227,9 +253,6 @@ void episode_game::update(const observable_data &param)
 
 void episode_game::add_enemies(int batch)
 {
-	shared_ptr<enemy> object;
-	return;
-	
 	unsigned int xmin = 50, xmax = 250;
 	unsigned int ymin = 120, ymax = 140;
 	
@@ -238,11 +261,11 @@ void episode_game::add_enemies(int batch)
 		unsigned int x = rand() % xmax + xmin;
 		unsigned int y = rand() % ymax + ymin;
 		
-		enemy *object = new enemy();
-		object->x_y(x,y);
-		object->start();
-		_enemies.push_back(object);
-		_collision_system.add(object);
+		enemy_ptr ptr = make_shared<enemy>();
+		ptr.get()->x_y(x,y);
+		ptr.get()->start();
+		_enemies.push_back(ptr);
+		_collision_system.add(ptr);
 	}
 }
 

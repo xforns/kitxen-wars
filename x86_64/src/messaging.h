@@ -24,8 +24,6 @@ private:
 	messaging();
 	~messaging();
 	
-	static void *t_add(void *vobject);
-	static void *t_remove(void *vobject);
 	static void *t_notify(void *vobject);
 	
 public:

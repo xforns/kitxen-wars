@@ -12,49 +12,19 @@ vector <observer*>messaging::_observers;
 
 void messaging::add(observer *object)
 {
-	pthread_t thread;
-	pthread_create(&thread,NULL,&t_add,object);
-}
-
-
-void *messaging::t_add(void *vobject)
-{
-	observer *object = (observer *)vobject;
-	
 	pthread_mutex_lock(&_mutex);
-	
-	if(dynamic_cast<observer*>(object)==NULL)
-	{
-		return NULL;
-	}
 	
 	_observers.push_back( object );
 	
 	pthread_mutex_unlock(&_mutex);
-	
-	pthread_exit(NULL);
 }
 
 
 void messaging::remove(observer *object)
 {
-	pthread_t thread;
-	pthread_create(&thread,NULL,&t_remove,object);
-}
-
-
-void *messaging::t_remove(void *vobject)
-{
-	observer *object = (observer *)vobject;
-	
 	pthread_mutex_lock(&_mutex);
 	
-	if(dynamic_cast<observer*>(object)==NULL)
-	{
-		return NULL;
-	}
-	
-	vector<observer*>::iterator it = _observers.begin();
+	auto it = _observers.begin();
 	
 	while(it!=_observers.end())
 	{
@@ -69,8 +39,6 @@ void *messaging::t_remove(void *vobject)
 	}
 	
 	pthread_mutex_unlock(&_mutex);
-	
-	pthread_exit(NULL);
 }
 
 
@@ -93,11 +61,9 @@ void *messaging::t_notify(void *vobject)
 {
 	pthread_mutex_lock(&_mutex);
 	
-	observable_data* t = (observable_data *)vobject;
+	observable_data *t = (observable_data *)vobject;
 	
-	vector<observer*>::iterator it;
-	
-	for(it=_observers.begin(); it!=_observers.end(); ++it)
+	for(auto it=_observers.begin(); it!=_observers.end(); ++it)
 	{
 		if(*it==NULL)
 		{

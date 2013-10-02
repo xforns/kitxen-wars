@@ -57,5 +57,28 @@ struct pt {
 
 enum entity_type { TYPE_NONE , TYPE_CHARACTER, TYPE_ENEMY, TYPE_BULLET, TYPE_BOMB };
 
+// Predicate to use in remove_if closures
+
+template <typename T>
+struct ptr_contains_predicate
+{
+    ptr_contains_predicate(T* pPtr) :
+    mPtr(pPtr)
+    {}
+
+    template <typename P>
+    bool operator()(const P& pPtr) const
+    {
+        return pPtr.get() == mPtr;
+    }
+
+    T* mPtr;
+};
+
+template <typename T>
+ptr_contains_predicate<T> ptr_contains(T* pPtr)
+{
+    return ptr_contains_predicate<T>(pPtr);
+}
 
 #endif /* DEFS_H */
