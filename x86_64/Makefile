@@ -16,7 +16,7 @@ $(TARGET): $(OBJECT_FILES)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(INC_PATH) $(LIB_PATH) $^ -o $(TARGET) 
 
 obj/%.o: src/%.cpp
-	$(CC) $(CC_FLAGS) -c -std=c++11 -stdlib=libc++ -o $@ $<
+	$(CC) $(CC_FLAGS) -c -std=c++11 -stdlib=libc++ -ggdb -o $@ $<
 
 clean:
 	rm -f $(TARGET) $(OBJECT_FILES) *~
