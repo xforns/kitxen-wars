@@ -75,8 +75,11 @@ void *collision_system::t_update(void *)
 	while(true)
 	{
 		pthread_mutex_lock(&_mutex);
-	
-		for(auto it=_entities.begin();it!=_entities.end();++it)
+		
+		int pos_obj1 = 0;
+		int pos_obj2 = 0;
+		
+		for(auto it=_entities.begin();it!=_entities.end();++it,pos_obj1++)
 		{
 			entity *object = (*it).get();
 			
@@ -106,12 +109,13 @@ void *collision_system::t_update(void *)
 				data.a = object->type();
 				data.b = TYPE_NONE;
 				data.c = collision;
+				data.o1 = *it;
 				messaging::getInstance().notify(data);
 			}
 		
 			// enemies, fire against enemies, fire against character and bomb collisions
 		
-			for(auto it2=_entities.begin();it2!=_entities.end();++it2)
+			for(auto it2=_entities.begin();it2!=_entities.end();++it2,pos_obj2++)
 			{
 				entity_ptr ptr2 = *it2;
 				if((*it).get()==ptr2.get())
@@ -130,6 +134,8 @@ void *collision_system::t_update(void *)
 					data.a = object->type();
 					data.b = object2->type();
 					data.c = collision;
+					data.o1 = *it;
+					data.o2 = ptr2;
 					messaging::getInstance().notify(data);
 				}
 			}

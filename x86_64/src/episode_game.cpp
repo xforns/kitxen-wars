@@ -29,6 +29,8 @@ void episode_game::start()
 	
 	_add_bullets = 0;
 	
+	_halt_action = false;
+	
 	_last_clock = clock();
 	
 	_background.start();
@@ -88,12 +90,13 @@ void episode_game::update()
 	double diff = ( clock() - _last_clock );
 	if(diff>=TIME_STEP)
 	{
+		_halt_action = true;
 		// main character logic
 		
 		
 		// enemies logic
 		
-		if(rand()%TIME_STEP>495)
+		if(rand()%TIME_STEP>498)
 		{
 			add_enemies(1);
 		}
@@ -140,12 +143,25 @@ void episode_game::update()
 		}
 		
 		// enemies bullets logic
+		for(auto it = _dead_enemies.begin(); it!=_dead_enemies.end();++it)
+		{
+			entity_ptr ptr = *it;
+			ptr.get()->stop();
+			_collision_system.remove(ptr);
+			
+			shared_ptr<enemy> eptr = dynamic_pointer_cast<enemy>(ptr);
+			
+			_enemies.erase(remove_if(_enemies.begin(),_enemies.end(),ptr_contains(eptr.get())));
+		}
+		_dead_enemies.clear();
 		
 		// energy logic
 		
 		// bomb logic
 		
 		_last_clock = clock();
+		
+		_halt_action = false;
 	}
 	
 	_character.get()->update();
@@ -238,7 +254,10 @@ void episode_game::update(const observable_data &param)
 		if( ( (param.a==TYPE_ENEMY) && (param.b==TYPE_BULLET) )
 			|| ( (param.a==TYPE_BULLET) && (param.b==TYPE_ENEMY) ) )
 		{
-			//cout << "Enemy dead!" << endl << flush;
+			if(!_halt_action)
+			{
+				_dead_enemies.push_back( param.a==TYPE_ENEMY ? param.o1 : param.o2 );
+			}
 		}
 	}
 }

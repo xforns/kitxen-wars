@@ -52,6 +52,8 @@ void messaging::notify(const observable_data &t)
 	nonconst->b = t.b;
 	nonconst->c = t.c;
 	nonconst->d = t.d;
+	nonconst->o1 = t.o1;
+	nonconst->o2 = t.o2;
 	
 	pthread_create(&thread,NULL,&t_notify,nonconst);
 }

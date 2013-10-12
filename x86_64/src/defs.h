@@ -40,6 +40,9 @@
 
 #include <string>
 
+
+class entity;
+
 struct observable_data {
 	
 	int msg_type;
@@ -47,6 +50,8 @@ struct observable_data {
 	int b;
 	int c;
 	std::string d;
+	std::shared_ptr<entity> o1;
+	std::shared_ptr<entity> o2;
 };
 
 struct pt {
