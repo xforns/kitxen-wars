@@ -34,8 +34,9 @@
 #define COLLISION_TOP (1<<4)
 #define COLLISION_BOTTOM (1<<2)
 
-// timesteps
+// time
 #define TIME_STEP_BG 5000
+#define TIME_EXPLOSION_DURATION 6000000
 
 
 #include <string>
@@ -60,7 +61,7 @@ struct pt {
 	double y;
 };
 
-enum entity_type { TYPE_NONE , TYPE_CHARACTER, TYPE_ENEMY, TYPE_BULLET, TYPE_BOMB };
+enum entity_type { TYPE_NONE , TYPE_CHARACTER, TYPE_ENEMY, TYPE_BULLET, TYPE_BOMB, TYPE_EXPLOSION };
 
 // Predicate to use in remove_if closures
 

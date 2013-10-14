@@ -1,27 +1,34 @@
-#ifndef ENEMY_H
-#define ENEMY_H
+#ifndef EXPLOSION_H
+#define EXPLOSION_H
 
 #include <OpenGL/OpenGL.h>
 
+#include <cstdio>
+#include <ctime>
+
 #include "entity.h"
-#include "asset_helper.h"
 #include "defs.h"
+#include "asset_helper.h"
 #include "messaging.h"
 #include "observer.h"
 
 using namespace std;
 
-class enemy : public entity, public observer 
+class explosion : public entity, public observer 
 {
 
 private:
 	
 	GLuint _bg;
 	
+	clock_t _last_clock;
+	
+	bool _is_dead;
+	
 public:
 	
-	enemy();
-	virtual ~enemy();
+	explosion();
+	virtual ~explosion();
 	
 	virtual void start();
 	virtual void stop();
@@ -29,8 +36,7 @@ public:
 	virtual void draw();
 	virtual void update(const observable_data &param);
 	
-	
-	long id;
+	bool isDead();
 };
 
-#endif /* ENEMY_H */
+#endif /* EXPLOSION_H */

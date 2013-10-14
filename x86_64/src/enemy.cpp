@@ -13,6 +13,8 @@ enemy::enemy()
 	_type = TYPE_ENEMY;
 	
 	_bg = asset_helper::getInstance().get_texture(asset_helper::ENEMY);
+	id = rand()%1000 + 1;
+	cout << "created enemy: " << id << endl << flush;
 }
 
 
@@ -30,8 +32,6 @@ void enemy::start()
 void enemy::stop()
 {
 	messaging::getInstance().remove(this);
-	
-	asset_helper::getInstance().unload_texture(asset_helper::ENEMY);
 }
 
 void enemy::update()

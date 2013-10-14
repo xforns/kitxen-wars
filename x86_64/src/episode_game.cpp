@@ -56,6 +56,8 @@ void episode_game::stop()
 	_collision_system.remove(_character);
 	
 	// enemies
+	asset_helper::getInstance().unload_texture(asset_helper::ENEMY);
+	
 	std::for_each( _enemies.begin(), _enemies.end(), [](shared_ptr<enemy> obj)
 		{
 			obj.get()->stop();
@@ -68,6 +70,9 @@ void episode_game::stop()
 			obj.get()->stop();
 		});
 	_bullets.clear();
+	
+	// explosions
+	asset_helper::getInstance().unload_texture(asset_helper::EXPLOSION);
 	
 	// collision system
 	_collision_system.stop();
@@ -90,7 +95,6 @@ void episode_game::update()
 	double diff = ( clock() - _last_clock );
 	if(diff>=TIME_STEP)
 	{
-		_halt_action = true;
 		// main character logic
 		
 		
@@ -143,25 +147,52 @@ void episode_game::update()
 		}
 		
 		// enemies bullets logic
+		_halt_action = true;
 		for(auto it = _dead_enemies.begin(); it!=_dead_enemies.end();++it)
 		{
+			// remove the enemy from the collision system and from this class collection
 			entity_ptr ptr = *it;
 			ptr.get()->stop();
+			
+			double x = ptr.get()->x();
+			double y = ptr.get()->y();
+			
 			_collision_system.remove(ptr);
 			
 			shared_ptr<enemy> eptr = dynamic_pointer_cast<enemy>(ptr);
 			
 			_enemies.erase(remove_if(_enemies.begin(),_enemies.end(),ptr_contains(eptr.get())));
+			
+			// add an explosion
+			_explosions.push_back(NULL);
+			_explosions.back() = new explosion();
+			_explosions.back()->x_y(x,y);
+			_explosions.back()->start();
 		}
 		_dead_enemies.clear();
+		_halt_action = false;
 		
 		// energy logic
 		
 		// bomb logic
 		
-		_last_clock = clock();
+		// explosions logic
+		auto it = _explosions.begin();
+		while(it!=_explosions.end())
+		{
+			(*it)->update();
+			
+			if((*it)->isDead())
+			{
+				(*it)->stop();
+				delete *it;
+				_explosions.erase(it);
+				--it;
+			}
+			++it;
+		}
 		
-		_halt_action = false;
+		_last_clock = clock();
 	}
 	
 	_character.get()->update();
@@ -183,6 +214,12 @@ void episode_game::draw()
 	draw_main_character();
 	
 	draw_bullets();
+	
+	// draw explosions
+	for(auto it = _explosions.begin(); it!=_explosions.end();++it)
+	{
+		(*it)->draw();
+	}
 	
 	glDisable(GL_BLEND);
 }
@@ -256,7 +293,14 @@ void episode_game::update(const observable_data &param)
 		{
 			if(!_halt_action)
 			{
-				_dead_enemies.push_back( param.a==TYPE_ENEMY ? param.o1 : param.o2 );
+				shared_ptr<enemy> eptr = dynamic_pointer_cast<enemy>(param.a==TYPE_ENEMY ? param.o1 : param.o2);
+				auto ff = find_if( _dead_enemies.begin(), _dead_enemies.end(), ptr_contains(eptr.get()) );
+				bool found = ff!=_dead_enemies.end();
+				
+				if(!found)
+				{
+					_dead_enemies.push_back( param.a==TYPE_ENEMY ? param.o1 : param.o2 );
+				}
 			}
 		}
 	}

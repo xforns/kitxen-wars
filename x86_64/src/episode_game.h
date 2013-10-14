@@ -19,6 +19,7 @@
 #include "character.h"
 #include "bullet.h"
 #include "enemy.h"
+#include "explosion.h"
 #include "collision_system.h"
 
 using namespace std;
@@ -32,7 +33,7 @@ private:
 	typedef shared_ptr<character> character_ptr;
 	typedef shared_ptr<enemy> enemy_ptr;
 	typedef shared_ptr<entity> entity_ptr;
-		
+	
 	clock_t _last_clock;
 	
 	background_game _background;
@@ -41,6 +42,7 @@ private:
 	vector <bullet_ptr> _bullets;
 	vector <enemy_ptr> _enemies;
 	vector <entity_ptr> _dead_enemies;
+	vector <explosion *> _explosions;
 	
 	unsigned int _add_bullets;
 	
