@@ -20,6 +20,7 @@
 #define MSG_KEYBOARD 2
 #define MSG_KEYBOARD_S 3
 #define MSG_COLLISION 4
+#define MSG_BOMB 5
 
 #define EPISODE_SPLASH 0
 #define EPISODE_MENU 1
@@ -39,7 +40,7 @@
 #define TIME_EXPLOSION_DURATION 6000000
 #define TIME_STEP_ENEMY_COLLISION 50000
 #define TIME_GAME_OVER 600000
-
+#define TIME_STEP_BOMB 25000
 
 #include <string>
 

@@ -10,12 +10,15 @@
 
 bomb::bomb()
 {
-	_type = TYPE_CHARACTER;
+	_type = TYPE_BOMB;
 	
-	_bg = asset_helper::getInstance().get_texture(asset_helper::CHARACTER);
+	_bg = asset_helper::getInstance().get_texture(asset_helper::BOMB);
 	
 	_pos.x = 160.f;
 	_pos.y = 50.f;
+	
+	_w = 40;
+	_h = 40;
 }
 
 
@@ -26,19 +29,46 @@ bomb::~bomb()
 
 void bomb::start()
 {
-	messaging::getInstance().add(this);
+	_last_clock = clock();
 }
 
 
 void bomb::stop()
 {
-	messaging::getInstance().remove(this);
-	
-	asset_helper::getInstance().unload_texture(asset_helper::CHARACTER);
+	asset_helper::getInstance().unload_texture(asset_helper::BOMB);
 }
 
 void bomb::update()
 {
+	double diff = clock() - _last_clock;
+	if(diff>=TIME_STEP_BOMB)
+	{
+		if(_pos.x > 160)
+		{
+			_pos.x--;
+		}
+		else if(_pos.x < 160)
+		{
+			_pos.x++;
+		}
+		if(_pos.y > 100)
+		{
+			_pos.y--;
+		}
+		else if(_pos.y < 100)
+		{
+			_pos.y++;
+		}
+		
+		_last_clock = clock();
+	}
+	
+	if( (_pos.x==160) && (_pos.y==100) )
+	{
+		observable_data data;
+		data.msg_type = MSG_BOMB;
+		messaging::getInstance().notify(data);
+	}
 }
 
 

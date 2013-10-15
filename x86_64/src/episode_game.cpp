@@ -29,6 +29,14 @@ void episode_game::start()
 	
 	_add_bullets = 0;
 	
+	_character_explosion = NULL;
+	
+	_bomb = NULL;
+	
+	_add_bomb = false;
+	
+	_kill_all_enemies = false;
+	
 	_background.start();
 	
 	_character = make_shared<character>();
@@ -56,6 +64,10 @@ void episode_game::stop()
 	if(_character_explosion!=NULL)
 	{
 		delete _character_explosion;
+	}
+	if(_bomb!=NULL)
+	{
+		delete _bomb;
 	}
 	
 	// enemies
@@ -136,6 +148,10 @@ void episode_game::update()
 		enemy_ptr ptr = *(ite++);
 		enemy *obj = ptr.get();
 		
+		if(_kill_all_enemies)
+		{
+			obj->set_dead(true);
+		}
 		// enemy is dead: remove it
 		if(obj->is_dead())
 		{
@@ -159,6 +175,14 @@ void episode_game::update()
 		}
 		
 		obj->update();
+	}
+	
+	if(_kill_all_enemies)
+	{
+		_kill_all_enemies = false;
+		_add_bomb = false;
+		delete _bomb;
+		_bomb = NULL;
 	}
 	
 	// character bullets
@@ -201,6 +225,18 @@ void episode_game::update()
 	// energy
 	
 	// bomb
+	if(_add_bomb)
+	{
+		_add_bomb = false;
+		
+		_bomb = new bomb();
+		_bomb->x_y(_character.get()->x(),_character.get()->y());
+		_bomb->start();
+	}
+	if(_bomb!=NULL)
+	{
+		_bomb->update();
+	}
 	
 	// explosions
 	
@@ -252,6 +288,12 @@ void episode_game::draw()
 		_character_explosion->draw();
 	}
 	
+	// bomb
+	if(_bomb!=NULL)
+	{
+		_bomb->draw();
+	}
+	
 	glDisable(GL_BLEND);
 }
 
@@ -285,7 +327,6 @@ void episode_game::draw_bullets()
 		bullet_ptr ptr = *(it++);
 		bullet *obj = ptr.get();
 		obj->draw();
-		
 	}
 }
 
@@ -317,6 +358,14 @@ void episode_game::update(const observable_data &param)
 		{
 			_add_bullets++;
 		}
+		// bomb
+		else if(param.a=='b')
+		{
+			if( (_bomb==NULL) && (_character.get()!=NULL) )
+			{
+				_add_bomb = true;
+			}
+		}
 	}
 	else if(param.msg_type==MSG_COLLISION)
 	{
@@ -335,6 +384,10 @@ void episode_game::update(const observable_data &param)
 				bptr.get()->set_dead(true);
 			}
 		}
+	}
+	else if(param.msg_type==MSG_BOMB)
+	{
+		_kill_all_enemies = true;
 	}
 }
 

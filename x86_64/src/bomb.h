@@ -2,6 +2,8 @@
 #define BOMB_H
 
 #include <OpenGL/OpenGL.h>
+#include <ctime>
+#include <cstdio>
 
 #include "entity.h"
 #include "asset_helper.h"
@@ -16,9 +18,9 @@ class bomb : public entity, public observer
 
 private:
 	
-	pt _pos;
-	long _id;
 	GLuint _bg;
+	
+	clock_t _last_clock;
 	
 public:
 	
