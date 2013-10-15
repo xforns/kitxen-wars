@@ -16,6 +16,9 @@ bullet::bullet()
 	
 	_pos.x = 160.f;
 	_pos.y = 50.f;
+	
+	_w = 4;
+	_h = 8;
 }
 
 

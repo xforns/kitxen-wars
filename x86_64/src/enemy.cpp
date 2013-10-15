@@ -14,7 +14,9 @@ enemy::enemy()
 	
 	_bg = asset_helper::getInstance().get_texture(asset_helper::ENEMY);
 	id = rand()%1000 + 1;
-	cout << "created enemy: " << id << endl << flush;
+	
+	_w = 40;
+	_h = 40;
 }
 
 

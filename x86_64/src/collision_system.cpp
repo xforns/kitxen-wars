@@ -171,7 +171,7 @@ unsigned int collision_system::is_collision(entity *obj, entity *obj2)
 		bool axis_x = axis.x()==1;
 		
 		// project all sides
-	
+		
 		vector <vec2>proj1;
 		proj1.push_back( vec2( obj->x() , obj->y() ) * axis );
 		proj1.push_back( vec2( obj->x() , obj->yh() ) * axis );
@@ -206,7 +206,7 @@ unsigned int collision_system::is_collision(entity *obj, entity *obj2)
 			obj2_max = val > obj2_max ? val : obj2_max;
 			
 		}
-	
+		
 		// check whether these segments collide
 		
 		if( ( obj1_max >= obj2_min ) && ( obj1_max <= obj2_max ) ) 
@@ -243,6 +243,7 @@ unsigned int collision_system::is_collision(entity *obj, entity *obj2)
 		{
 			collision &= false;
 		}
+		
 	}
 	
 	if(collision)
