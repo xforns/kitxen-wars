@@ -117,6 +117,9 @@ void episode_game::update()
 			_character_explosion->stop();
 			delete _character_explosion;
 			_character_explosion = NULL;
+			
+			// end of game
+			_current_episode_status = ENDED;
 		}
 	}
 		

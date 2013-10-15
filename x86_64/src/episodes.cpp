@@ -112,6 +112,14 @@ void episodes::update()
 		{
 			_next_episode = MENU;
 		}
+		else if(_current_episode_def==GAME)
+		{
+			_next_episode = GAME_OVER;
+		}
+		else if(_current_episode_def==GAME_OVER)
+		{
+			_next_episode = MENU;
+		}
 	}
 	
 	if(_current_episode_def!=_next_episode)
@@ -165,6 +173,10 @@ bool episodes::load(_episode_defs episode)
 	else if(_current_episode_def==GAME)
 	{
 		_current_episode = new episode_game();
+	}
+	else if(_current_episode_def==GAME_OVER)
+	{
+		_current_episode = new episode_end();
 	}
 	
 	_current_episode->start();

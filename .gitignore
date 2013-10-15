@@ -24,3 +24,4 @@ x86_64/obj/main.o
 x86_64/obj/messaging.o
 background_game.o
 explosion.o
+episode_end.o

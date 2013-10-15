@@ -123,7 +123,7 @@ void character::update(const observable_data &param)
 		}
 		// enemy collision
 		else if( ( (param.a==TYPE_CHARACTER) && (param.b==TYPE_ENEMY) )
-			|| (param.a==TYPE_ENEMY) && (param.b==TYPE_CHARACTER) )
+			|| ( (param.a==TYPE_ENEMY) && (param.b==TYPE_CHARACTER) ) )
 		{
 			_dead = true;
 		}

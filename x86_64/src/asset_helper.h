@@ -19,7 +19,7 @@ public:
 	
 	enum _asset_defs { SPLASH_COMPANY, SPLASH_PRESENTS, SPLASH_GAME, BG_1, BG_2, 
 							CHARACTER, BULLET, ENEMY, EXPLOSION, MENU, BOMB, 
-							ENERGY, HELP, END_FAIL, END_SUCCESS }; 
+							ENERGY, HELP, GAME_OVER }; 
 	
 private:
 
@@ -115,8 +115,7 @@ private:
 		_filenames.insert( pair<_asset_defs,string>(BOMB,"../assets/gran.bmp") );
 		_filenames.insert( pair<_asset_defs,string>(ENERGY,"../assets/energy.bmp") );
 		_filenames.insert( pair<_asset_defs,string>(HELP,"../assets/help.bmp") );
-		/*_filenames.insert( pair<_asset_defs,string>(END_FAIL,"../assets/.bmp") );
-		_filenames.insert( pair<_asset_defs,string>(END_SUCCESS,"../assets/.bmp") );*/
+		_filenames.insert( pair<_asset_defs,string>(GAME_OVER,"../assets/pilla1.bmp") );
 		
 		_textures = map<_asset_defs,GLuint>();
 	}
