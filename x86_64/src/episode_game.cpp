@@ -47,9 +47,16 @@ void episode_game::stop()
 	_background.stop();
 	
 	// character
-	_character.get()->stop();
+	if(_character.get()!=NULL)
+	{
+		_character.get()->stop();
 	
-	_collision_system.remove(_character);
+		_collision_system.remove(_character);
+	}
+	if(_character_explosion!=NULL)
+	{
+		delete _character_explosion;
+	}
 	
 	// enemies
 	asset_helper::getInstance().unload_texture(asset_helper::ENEMY);
@@ -89,8 +96,30 @@ void episode_game::pause()
 void episode_game::update()
 {
 	// main character
-	
-	
+	if( (_character.get()!=NULL) && (_character.get()->is_dead()) )
+	{
+		_character.get()->stop();
+		
+		// add an explosion
+		_character_explosion = new explosion();
+		_character_explosion->x_y(_character.get()->x(),_character.get()->y());
+		_character_explosion->start();
+		
+		_collision_system.remove(_character);
+		
+		_character.reset();
+	}
+	if(_character_explosion!=NULL)
+	{
+		_character_explosion->update();
+		if(_character_explosion->is_dead())
+		{
+			_character_explosion->stop();
+			delete _character_explosion;
+			_character_explosion = NULL;
+		}
+	}
+		
 	// enemies
 	
 	if(rand()%TIME_STEP>498)
@@ -131,16 +160,19 @@ void episode_game::update()
 	
 	// character bullets
 	
-	while(_add_bullets>0)
+	if(_character.get()!=NULL)
 	{
-		bullet_ptr obj_ptr = make_shared<bullet>();
-		obj_ptr.get()->x_y(_character.get()->cx(),_character.get()->yh());
-		obj_ptr.get()->start();
+		while(_add_bullets>0)
+		{
+			bullet_ptr obj_ptr = make_shared<bullet>();
+			obj_ptr.get()->x_y(_character.get()->cx(),_character.get()->yh());
+			obj_ptr.get()->start();
 		
-		_bullets.push_back(obj_ptr);
-		_collision_system.add(obj_ptr);
+			_bullets.push_back(obj_ptr);
+			_collision_system.add(obj_ptr);
 		
-		_add_bullets--;
+			_add_bullets--;
+		}
 	}
 	
 	auto itb = _bullets.begin();
@@ -184,7 +216,10 @@ void episode_game::update()
 		++it;
 	}
 	
-	_character.get()->update();
+	if(_character.get()!=NULL)
+	{
+		_character.get()->update();
+	}
 }
 
 
@@ -209,6 +244,10 @@ void episode_game::draw()
 	{
 		(*it)->draw();
 	}
+	if(_character_explosion!=NULL)
+	{
+		_character_explosion->draw();
+	}
 	
 	glDisable(GL_BLEND);
 }
@@ -216,7 +255,10 @@ void episode_game::draw()
 
 void episode_game::draw_main_character()
 {
-	_character.get()->draw();
+	if(_character.get()!=NULL)
+	{
+		_character.get()->draw();
+	}
 }
 
 

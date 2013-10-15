@@ -38,6 +38,7 @@ private:
 	vector <bullet_ptr> _bullets;
 	vector <enemy_ptr> _enemies;
 	vector <explosion *> _explosions;
+	explosion *_character_explosion;
 	
 	unsigned int _add_bullets;
 	

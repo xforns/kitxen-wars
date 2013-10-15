@@ -98,24 +98,34 @@ void character::update(const observable_data &param)
 				break;
 		}
 	}
-	// bounds check
-	else if( (param.msg_type==MSG_COLLISION) && (param.a==TYPE_CHARACTER) && (param.b==TYPE_NONE) )
+	// collisions
+	else if(param.msg_type==MSG_COLLISION)
 	{
-		if(param.c==COLLISION_LEFT)
+		// bounds check
+		if( (param.a==TYPE_CHARACTER) && (param.b==TYPE_NONE) )
 		{
-			_pos.x++;
+			if(param.c==COLLISION_LEFT)
+			{
+				_pos.x++;
+			}
+			else if(param.c==COLLISION_RIGHT)
+			{
+				_pos.x--;
+			}
+			else if(param.c==COLLISION_TOP)
+			{
+				_pos.y--;
+			}
+			else if(param.c==COLLISION_BOTTOM)
+			{
+				_pos.y++;
+			}
 		}
-		else if(param.c==COLLISION_RIGHT)
+		// enemy collision
+		else if( ( (param.a==TYPE_CHARACTER) && (param.b==TYPE_ENEMY) )
+			|| (param.a==TYPE_ENEMY) && (param.b==TYPE_CHARACTER) )
 		{
-			_pos.x--;
-		}
-		else if(param.c==COLLISION_TOP)
-		{
-			_pos.y--;
-		}
-		else if(param.c==COLLISION_BOTTOM)
-		{
-			_pos.y++;
+			_dead = true;
 		}
 	}
 }
