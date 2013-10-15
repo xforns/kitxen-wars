@@ -37,6 +37,7 @@
 // time
 #define TIME_STEP_BG 5000
 #define TIME_EXPLOSION_DURATION 6000000
+#define TIME_STEP_ENEMY_COLLISION 50000
 
 
 #include <string>

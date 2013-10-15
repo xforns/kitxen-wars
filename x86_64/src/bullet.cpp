@@ -30,8 +30,6 @@ bullet::~bullet()
 void bullet::start()
 {
 	messaging::getInstance().add(this);
-	
-	_die = false;
 }
 
 
@@ -40,8 +38,6 @@ void bullet::stop()
 	messaging::getInstance().remove(this);
 	
 	asset_helper::getInstance().unload_texture(asset_helper::BULLET);
-	
-	_die = true;
 }
 
 void bullet::update()
@@ -72,17 +68,6 @@ void bullet::draw()
 }
 
 
-bool bullet::is_dead()
-{
-	return _die;
-}
-
-
-void bullet::set_dead()
-{
-	_die = true;
-}
-
 /****************************************************************
 
 						observer interface
@@ -97,7 +82,7 @@ void bullet::update(const observable_data &param)
 	{
 		if(param.c==COLLISION_TOP)
 		{
-			_die = true;
+			_dead = true;
 		}
 	}
 	

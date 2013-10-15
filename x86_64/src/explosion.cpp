@@ -21,16 +21,11 @@ explosion::~explosion()
 }
 
 
-bool explosion::isDead()
-{
-	return _is_dead;
-}
-
-
 void explosion::start()
 {
 	_last_clock = clock();
-	_is_dead = false;
+	
+	_dead = false;
 }
 
 
@@ -43,14 +38,14 @@ void explosion::update()
 	double diff = clock()-_last_clock;
 	if(diff>=TIME_EXPLOSION_DURATION)
 	{
-		_is_dead = true;
+		_dead = true;
 	}
 }
 
 
 void explosion::draw()
 {
-	if(!_is_dead)
+	if(!_dead)
 	{
 		glPushMatrix();
 	

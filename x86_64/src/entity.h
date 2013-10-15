@@ -12,6 +12,7 @@ protected:
 	double _w;
 	double _h;
 	entity_type _type;
+	bool _dead;
 	
 public:
 	
@@ -69,6 +70,16 @@ public:
 	double cy()
 	{
 		return _pos.y + _h/2;
+	}
+	
+	bool is_dead()
+	{
+		return _dead;
+	}
+	
+	void set_dead(bool is_dead)
+	{
+		_dead = is_dead;
 	}
 	
 };

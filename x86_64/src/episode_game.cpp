@@ -29,10 +29,6 @@ void episode_game::start()
 	
 	_add_bullets = 0;
 	
-	_halt_action = false;
-	
-	_last_clock = clock();
-	
 	_background.start();
 	
 	_character = make_shared<character>();
@@ -92,107 +88,100 @@ void episode_game::pause()
 
 void episode_game::update()
 {
-	double diff = ( clock() - _last_clock );
-	if(diff>=TIME_STEP)
+	// main character
+	
+	
+	// enemies
+	
+	if(rand()%TIME_STEP>498)
 	{
-		// main character logic
+		add_enemies(1);
+	}
+	
+	auto ite = _enemies.begin();
+	while(ite!=_enemies.end())
+	{
+		enemy_ptr ptr = *(ite++);
+		enemy *obj = ptr.get();
 		
-		
-		// enemies logic
-		
-		if(rand()%TIME_STEP>498)
+		// enemy is dead: remove it
+		if(obj->is_dead())
 		{
-			add_enemies(1);
-		}
-		
-		auto ite = _enemies.begin();
-		while(ite!=_enemies.end())
-		{
-			enemy_ptr ptr = *(ite++);
-			enemy *obj = ptr.get();
-			obj->update();
-		}
-		
-		// character bullets logic
-		while(_add_bullets>0)
-		{
-			bullet_ptr obj_ptr = make_shared<bullet>();
-			obj_ptr.get()->x_y(_character.get()->cx(),_character.get()->yh());
-			obj_ptr.get()->start();
-			
-			_bullets.push_back(obj_ptr);
-			_collision_system.add(obj_ptr);
-			
-			_add_bullets--;
-		}
-		
-		auto itb = _bullets.begin();
-		while(itb!=_bullets.end())
-		{
-			bullet_ptr ptr = *(itb);
-			bullet *obj = ptr.get();
-			
-			// is bullet dead
-			if(obj->is_dead())
-			{ 
-				obj->stop();
-				_collision_system.remove(ptr);
-				_bullets.erase(remove_if(_bullets.begin(),_bullets.end(),ptr_contains(ptr.get())));
-				
-				continue;
-			}
-			itb++;
-			
-			obj->update();
-		}
-		
-		// enemies bullets logic
-		_halt_action = true;
-		for(auto it = _dead_enemies.begin(); it!=_dead_enemies.end();++it)
-		{
-			// remove the enemy from the collision system and from this class collection
-			entity_ptr ptr = *it;
-			ptr.get()->stop();
-			
 			double x = ptr.get()->x();
 			double y = ptr.get()->y();
 			
+			obj->stop();
+			
 			_collision_system.remove(ptr);
 			
-			shared_ptr<enemy> eptr = dynamic_pointer_cast<enemy>(ptr);
-			
-			_enemies.erase(remove_if(_enemies.begin(),_enemies.end(),ptr_contains(eptr.get())));
+			_enemies.erase(remove_if(_enemies.begin(),_enemies.end(),ptr_contains(ptr.get())));
 			
 			// add an explosion
 			_explosions.push_back(NULL);
 			_explosions.back() = new explosion();
 			_explosions.back()->x_y(x,y);
 			_explosions.back()->start();
-		}
-		_dead_enemies.clear();
-		_halt_action = false;
-		
-		// energy logic
-		
-		// bomb logic
-		
-		// explosions logic
-		auto it = _explosions.begin();
-		while(it!=_explosions.end())
-		{
-			(*it)->update();
 			
-			if((*it)->isDead())
-			{
-				(*it)->stop();
-				delete *it;
-				_explosions.erase(it);
-				--it;
-			}
-			++it;
+			ite--;
+			continue;
 		}
 		
-		_last_clock = clock();
+		obj->update();
+	}
+	
+	// character bullets
+	
+	while(_add_bullets>0)
+	{
+		bullet_ptr obj_ptr = make_shared<bullet>();
+		obj_ptr.get()->x_y(_character.get()->cx(),_character.get()->yh());
+		obj_ptr.get()->start();
+		
+		_bullets.push_back(obj_ptr);
+		_collision_system.add(obj_ptr);
+		
+		_add_bullets--;
+	}
+	
+	auto itb = _bullets.begin();
+	while(itb!=_bullets.end())
+	{
+		bullet_ptr ptr = *(itb);
+		bullet *obj = ptr.get();
+		
+		// is bullet dead
+		if(obj->is_dead())
+		{ 
+			obj->stop();
+			_collision_system.remove(ptr);
+			_bullets.erase(remove_if(_bullets.begin(),_bullets.end(),ptr_contains(ptr.get())));
+			
+			continue;
+		}
+		itb++;
+		
+		obj->update();
+	}
+	
+	// energy
+	
+	// bomb
+	
+	// explosions
+	
+	auto it = _explosions.begin();
+	while(it!=_explosions.end())
+	{
+		(*it)->update();
+		
+		if((*it)->is_dead())
+		{
+			(*it)->stop();
+			delete *it;
+			_explosions.erase(it);
+			--it;
+		}
+		++it;
 	}
 	
 	_character.get()->update();
@@ -286,21 +275,19 @@ void episode_game::update(const observable_data &param)
 	}
 	else if(param.msg_type==MSG_COLLISION)
 	{
-		//cout << "Collision! " << param.a << " - " << param.b << endl << flush;
 		// bullet to enemy collision
 		if( ( (param.a==TYPE_ENEMY) && (param.b==TYPE_BULLET) )
 			|| ( (param.a==TYPE_BULLET) && (param.b==TYPE_ENEMY) ) )
 		{
-			if(!_halt_action)
+			shared_ptr<enemy> eptr = dynamic_pointer_cast<enemy>(param.a==TYPE_ENEMY ? param.o1 : param.o2);
+			if(eptr.get()!=NULL)
 			{
-				shared_ptr<enemy> eptr = dynamic_pointer_cast<enemy>(param.a==TYPE_ENEMY ? param.o1 : param.o2);
-				auto ff = find_if( _dead_enemies.begin(), _dead_enemies.end(), ptr_contains(eptr.get()) );
-				bool found = ff!=_dead_enemies.end();
-				
-				if(!found)
-				{
-					_dead_enemies.push_back( param.a==TYPE_ENEMY ? param.o1 : param.o2 );
-				}
+				eptr.get()->set_dead(true);
+			}
+			shared_ptr<bullet> bptr = dynamic_pointer_cast<bullet>(param.a==TYPE_BULLET ? param.o1 : param.o2);
+			if(bptr.get()!=NULL)
+			{
+				bptr.get()->set_dead(true);
 			}
 		}
 	}

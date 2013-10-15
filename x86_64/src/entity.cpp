@@ -11,6 +11,8 @@
 entity::entity()
 {
 	_type = TYPE_NONE;
+	
+	_dead = false;
 }
 
 entity::~entity()

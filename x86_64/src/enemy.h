@@ -2,6 +2,8 @@
 #define ENEMY_H
 
 #include <OpenGL/OpenGL.h>
+#include <ctime>
+#include <cstdio>
 
 #include "entity.h"
 #include "asset_helper.h"
@@ -17,6 +19,7 @@ class enemy : public entity, public observer
 private:
 	
 	GLuint _bg;
+	clock_t _last_clock;
 	
 public:
 	
@@ -29,8 +32,6 @@ public:
 	virtual void draw();
 	virtual void update(const observable_data &param);
 	
-	
-	long id;
 };
 
 #endif /* ENEMY_H */
