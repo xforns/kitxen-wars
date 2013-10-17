@@ -35,6 +35,9 @@ private:
 	
 public:
 	
+	// Get an instance of this singleton.
+	// Returns:
+	//	This class' instance.
 	static asset_helper& getInstance()
 	{
 		static asset_helper instance;
@@ -42,6 +45,12 @@ public:
 	}
 	
 	
+	// Returns a texture given its keyword.
+	// If the texture is not loaded, first try to load it.
+	// Params:
+	//  asset: The keyword.
+	// Returns:
+	// GLuint: The texture.
 	GLuint get_texture(_asset_defs asset)
 	{
 		// try to load texture
@@ -58,6 +67,11 @@ public:
 	}
 	
 	
+	// Unloads a texture.
+	// Params:
+	//  asset: The keyword.
+	// _asset_status: If it's been correct, it returns UNLOADED. 
+	// 					Otherwise, another error is returned.
 	_asset_status unload_texture(_asset_defs asset)
 	{
 		// filename not defined?
@@ -98,6 +112,8 @@ private:
 	asset_helper& operator=(asset_helper const& copy);
 	
 	
+	// Private constructor.
+	// Initializes the filenames structure.
 	asset_helper() {
 		
 		// set filenames
@@ -122,6 +138,8 @@ private:
 	}
 	
 	
+	// Destructor.
+	// Unloads the filenames structure and unloads all loaded textures.
 	~asset_helper()
 	{
 		// delete textures
@@ -136,6 +154,11 @@ private:
 	}
 	
 	
+	// Loads a texture using the SOIL library.
+	// Params:
+	//  asset: The keyword.
+	// Returns:
+	//  _asset_status: If it's been correct, returns LOADED.
 	_asset_status load_texture(_asset_defs asset)
 	{
 		// filename not defined?
@@ -161,7 +184,6 @@ private:
 			SOIL_CREATE_NEW_ID,
 			SOIL_FLAG_MIPMAPS | SOIL_FLAG_MULTIPLY_ALPHA | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
 		);
-		
 		
 		// loaded? save it
 		if((0!=tex2d))

@@ -35,12 +35,6 @@ void collision_system::stop()
 }
 
 
-void collision_system::clear()
-{
-	
-}
-
-
 void collision_system::set_bounds(int x1, int y1, int x2, int y2)
 {
 	_bound_x1 = x1;

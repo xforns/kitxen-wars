@@ -33,7 +33,12 @@ public:
 	
 	void start();
 	void stop();
+	
+	// Static method called launched in a new thread.
+	// Params:
+	//  void *: nothing in this case is being passed in.
 	static void *t_update(void *);
+	
 	void draw();
 	virtual void update(const observable_data &param);
 	

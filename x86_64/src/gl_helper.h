@@ -37,11 +37,15 @@ public:
 	}
 	
 	
-	// novembre: dissabte 9
-	// novembre: dia 1 començaria el periode de prova
-	// desembre: dia 7
-	// acabaria el periode de prova el 8
-	// diumenge novembre 24: deep jungle comença
+	// Draws a texture onto a simple square by using 2 triangles.
+	// Inputs:
+	//	texture: Given texture.
+	//	tx: Translation in x.
+	//	ty: Translation in y.
+	//	x: 
+	//	y: 
+	//	xw: 
+	//	yh: 
 	static void draw_texture(GLuint texture, double tx, double ty, int x, int y, int xw, int yh)
 	{
 		glPushMatrix();
@@ -52,17 +56,29 @@ public:
 		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);	
-	
-	    glBegin(GL_QUADS);
-	    glTexCoord2i(1,1); glVertex2i(xw,yh);
-	    glTexCoord2i(1,0); glVertex2i(xw,y);
-	    glTexCoord2i(0,0); glVertex2i(x,y);
-	    glTexCoord2i(0,1); glVertex2i(x,yh);
+		
+		glBegin(GL_TRIANGLES); 	
+		glTexCoord2f(0.0f, 0.0f);	glVertex2i(x,y);
+		glTexCoord2f(1.0f, 0.0f);	glVertex2i(xw,y);
+		glTexCoord2f(1.0f, 1.0f);	glVertex2i(xw,yh);
+		glTexCoord2f(0.0f, 0.0f);	glVertex2i(x,y);
+		glTexCoord2f(0.0f, 1.0f);	glVertex2i(x,yh);
+		glTexCoord2f(1.0f, 1.0f);	glVertex2i(xw,yh);
 		glEnd();
-	
+		
 		glPopMatrix();
 	}
 	
+	
+	// Draws a quad.
+	// Inputs:
+	//	tx: Translation in x.
+	//	ty: Translation in y.
+	//	x:
+	//	y:
+	//	xw:
+	//	yh:
+	//	color: Static array of 3 specifying the color.
 	static void draw_quad(double tx, double ty, int x, int y, int xw, int yh, float color[3])
 	{
 		glPushMatrix();

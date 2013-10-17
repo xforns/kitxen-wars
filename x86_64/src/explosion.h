@@ -35,8 +35,6 @@ public:
 	virtual void update();
 	virtual void draw();
 	virtual void update(const observable_data &param);
-	
-	bool isDead();
 };
 
 #endif /* EXPLOSION_H */

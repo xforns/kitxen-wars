@@ -39,11 +39,26 @@ public:
 	
 	void start();
 	void stop();
-	void clear();
+	
+	// Sets the game boundaries (which anyway correspond to the active window).
+	// Params:
+	//  x1:
+	//  y1:
+	//  x2:
+	//  y2:
 	void set_bounds(int x1, int y1, int x2, int y2);
 	
+	// Add an object of base type Entity to the collision system,
+	// so it's taken in account in all the processing.
+	// Params:
+	//  ptr: Shared pointer of type Entity.
 	void add(entity_ptr ptr);
+	
+	// Removes an object of base type Entity from the collision system.
+	// Params:
+	//  ptr: Shared pointer of type Entity.
 	void remove(entity_ptr ptr);
+	
 };
 
 #endif /* COLLISION_SYSTEM_H */
