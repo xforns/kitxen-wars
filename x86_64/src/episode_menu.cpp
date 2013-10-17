@@ -60,10 +60,10 @@ void episode_menu::draw()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);	
 
     glBegin(GL_QUADS);
-    glTexCoord2i(1,1); glVertex2i(320,200);	// top right
-    glTexCoord2i(1,0); glVertex2i(320,0);	// bottom right
-    glTexCoord2i(0,0); glVertex2i(0,0);		// bottom left
-    glTexCoord2i(0,1); glVertex2i(0,200);	// top left
+    glTexCoord2i(1,1); glVertex2i(320,200);
+    glTexCoord2i(1,0); glVertex2i(320,0);
+    glTexCoord2i(0,0); glVertex2i(0,0);
+    glTexCoord2i(0,1); glVertex2i(0,200);
 	glEnd();
 }
 

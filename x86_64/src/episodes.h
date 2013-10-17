@@ -16,6 +16,7 @@
 #include "episode_help.h"
 #include "episode_game.h"
 #include "episode_end.h"
+#include "episode_credits.h"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ class episodes : public observer
 	
 private:
 	
-	enum _episode_defs { SPLASH, MENU, GAME, HELP, GAME_OVER };
+	enum _episode_defs { SPLASH, MENU, GAME, HELP, GAME_OVER, END_GAME };
 	enum _status { STATUS_PLAYING, STATUS_END };
 	
 	_status _current_status;

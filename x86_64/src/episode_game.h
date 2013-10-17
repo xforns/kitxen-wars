@@ -19,6 +19,7 @@
 #include "enemy.h"
 #include "explosion.h"
 #include "bomb.h"
+#include "energy.h"
 #include "collision_system.h"
 
 using namespace std;
@@ -41,9 +42,12 @@ private:
 	vector <explosion *> _explosions;
 	explosion *_character_explosion;
 	bomb *_bomb;
+	energy *_energy;
+	
 	
 	bool _add_bomb;
 	bool _kill_all_enemies;
+	bool _kill_all_enemies_enable;
 	
 	unsigned int _add_bullets;
 	

@@ -89,10 +89,7 @@ void episodes::update(const observable_data &param)
 		// exit
 		else if(param.a==EPISODE_EXIT)
 		{
-			_current_episode->stop();
-			delete _current_episode;
-			
-			_current_status = STATUS_END;
+			_next_episode = END_GAME;
 		}
 	}
 }
@@ -105,6 +102,11 @@ void episodes::update(const observable_data &param)
 
 void episodes::update()
 {
+	if(hasFinished())
+	{
+		return;
+	}
+	
 	// change episode
 	if(_current_episode->get_episode_status()==episode::ENDED)
 	{
@@ -128,16 +130,35 @@ void episodes::update()
 	}
 	
 	_current_episode->update();
+	
+	// check if the game is requested to end
+	if(_current_episode_def==END_GAME)
+	{
+		if(_current_episode->get_episode_status()==episode::ENDED)
+		{
+			_current_episode->stop();
+			delete _current_episode;
+			_current_episode = NULL;
+			
+			_current_status = STATUS_END;
+		}
+	}
 }
 
 
 void episodes::draw()
 {
+	if(hasFinished())
+	{
+		return;
+	}
 	
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glLoadIdentity();
 	glOrtho(0.0, 320.0, 0.0, 200, -1.0, 1.0);
+	
+	glMatrixMode(GL_MODELVIEW);
 	
 	_current_episode->draw();
 	
@@ -177,6 +198,10 @@ bool episodes::load(_episode_defs episode)
 	else if(_current_episode_def==GAME_OVER)
 	{
 		_current_episode = new episode_end();
+	}
+	else if(_current_episode_def==END_GAME)
+	{
+		_current_episode = new episode_credits();
 	}
 	
 	_current_episode->start();

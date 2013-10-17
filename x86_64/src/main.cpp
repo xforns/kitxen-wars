@@ -99,7 +99,7 @@ int main (int argc, char **argv)
 	glutSpecialFunc(keySpecial);
 	
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 	episodes.start();
 	
     glutMainLoop();

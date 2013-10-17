@@ -37,6 +37,8 @@ void episode_game::start()
 	
 	_kill_all_enemies = false;
 	
+	_kill_all_enemies_enable = false;
+	
 	_background.start();
 	
 	_character = make_shared<character>();
@@ -46,6 +48,9 @@ void episode_game::start()
 	_collision_system.start();
 	
 	_collision_system.add(_character);
+	
+	_energy = new energy();
+	_energy->start();
 }
 
 
@@ -67,6 +72,7 @@ void episode_game::stop()
 	}
 	if(_bomb!=NULL)
 	{
+		_bomb->stop();
 		delete _bomb;
 	}
 	
@@ -91,6 +97,10 @@ void episode_game::stop()
 	
 	// collision system
 	_collision_system.stop();
+	
+	// energy
+	_energy->stop();
+	delete _energy;
 	
 	// messaging
 	messaging::getInstance().remove(this);
@@ -180,6 +190,7 @@ void episode_game::update()
 	if(_kill_all_enemies)
 	{
 		_kill_all_enemies = false;
+		_kill_all_enemies_enable = false;
 		_add_bomb = false;
 		delete _bomb;
 		_bomb = NULL;
@@ -223,9 +234,10 @@ void episode_game::update()
 	}
 	
 	// energy
+	_energy->update();
 	
 	// bomb
-	if(_add_bomb)
+	if( (_add_bomb) && (_kill_all_enemies_enable) )
 	{
 		_add_bomb = false;
 		
@@ -268,8 +280,8 @@ void episode_game::draw()
 	
     _background.draw();
 	
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
     //glShadeModel(GL_FLAT);
 	
     draw_enemies();
@@ -294,7 +306,10 @@ void episode_game::draw()
 		_bomb->draw();
 	}
 	
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
+	
+	// energy
+	_energy->draw();
 }
 
 
@@ -389,6 +404,11 @@ void episode_game::update(const observable_data &param)
 	{
 		_kill_all_enemies = true;
 	}
+	else if(param.msg_type==MSG_BOMB_ENABLE)
+	{
+		_kill_all_enemies_enable = true;
+	}
+	
 }
 
 

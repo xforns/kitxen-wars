@@ -25,3 +25,5 @@ x86_64/obj/messaging.o
 background_game.o
 explosion.o
 episode_end.o
+x86_64/obj/energy.o
+x86_64/obj/episode_credits.o
