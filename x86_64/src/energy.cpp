@@ -1,5 +1,5 @@
 #include "energy.h"
-
+#include "gl_helper.h"
 
 /****************************************************************
 
@@ -55,40 +55,8 @@ void energy::update()
 
 void energy::draw()
 {
-	glPushMatrix();
-	
-	glTranslatef(_pos.x,_pos.y,0.f);
-	
-	glBindTexture(GL_TEXTURE_2D,_bg);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);	
-	
-    glBegin(GL_QUADS);
-    glTexCoord2i(1,1); glVertex2i(120,20);
-    glTexCoord2i(1,0); glVertex2i(120,0);
-    glTexCoord2i(0,0); glVertex2i(0,0);
-    glTexCoord2i(0,1); glVertex2i(0,20);
-	glEnd();
-	
-	glBindTexture(GL_TEXTURE_2D, 0);
-	
-	glPushMatrix();
-	
-	glTranslatef(38.f,0.f,0.f);
-	glLineWidth(1.f);
-	glColor3f(0.f,1.f,0.f);
-	
-    glBegin(GL_QUADS);
-    glVertex2i(_en,18);
-    glVertex2i(_en,2);
-    glVertex2i(0,2);
-    glVertex2i(0,18);
-	glEnd();
-	
-	glPopMatrix();
-	
-	glPopMatrix();
+	gl_helper::draw_texture(_bg,_pos.x,_pos.y,0,0,120,20);
+	gl_helper::draw_quad(_pos.x+38.f,_pos.y,0,2,_en,18,_energy_color);
 }
 
 

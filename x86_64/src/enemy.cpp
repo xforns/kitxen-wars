@@ -1,5 +1,5 @@
 #include "enemy.h"
-
+#include "gl_helper.h"
 
 /****************************************************************
 
@@ -43,23 +43,7 @@ void enemy::update()
 
 void enemy::draw()
 {
-	glPushMatrix();
-	
-	glTranslatef(_pos.x,_pos.y,0.f);
-	
-	glBindTexture(GL_TEXTURE_2D,_bg);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);	
-	
-    glBegin(GL_QUADS);
-    glTexCoord2i(1,1); glVertex2i(40,40);	// top right
-    glTexCoord2i(1,0); glVertex2i(40,0);	// bottom right
-    glTexCoord2i(0,0); glVertex2i(0,0);		// bottom left
-    glTexCoord2i(0,1); glVertex2i(0,40);	// top left
-	glEnd();
-	
-	glPopMatrix();
+	gl_helper::draw_texture(_bg,_pos.x,_pos.y,0,0,40,40);
 }
 
 

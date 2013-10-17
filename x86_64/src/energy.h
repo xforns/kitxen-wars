@@ -22,6 +22,8 @@ protected:
 	
 	int _en;
 	
+	float _energy_color[3] = {0.f,1.f,0.f};
+	
 public:
 	
 	energy();
