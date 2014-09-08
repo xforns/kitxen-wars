@@ -68,6 +68,8 @@ void *collision_system::t_update(void *)
 {
 	while(true)
 	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		
 		pthread_mutex_lock(&_mutex);
 		
 		int pos_obj1 = 0;

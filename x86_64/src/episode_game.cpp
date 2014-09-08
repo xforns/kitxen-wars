@@ -3,6 +3,7 @@
 #include <iostream>
 
 #define TIME_STEP 500
+#define MAX_ENEMIES 20
 
 /****************************************************************
 
@@ -147,7 +148,7 @@ void episode_game::update()
 		
 	// enemies
 	
-	if(rand()%TIME_STEP>498)
+	if( (rand()%TIME_STEP>480))
 	{
 		add_enemies(1);
 	}

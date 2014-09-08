@@ -1,12 +1,14 @@
 #ifndef COLLISION_SYSTEM_H
 #define COLLISION_SYSTEM_H
 
-#include <OpenGL/OpenGL.h>
 #include <GLUT/GLUT.h>
 #include <vector>
 #include <string>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
+#include <OpenGL/OpenGL.h>
 #include "SOIL.h"
 #include "entity.h"
 #include "defs.h"
