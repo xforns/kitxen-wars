@@ -2,7 +2,7 @@
 
 This is the repository for Kitchen Wars. Bear in mind that this is stupidity at its fullest.
 
-This project is a very basic shoot-em'up game. It was developed in the year 2000 as the final project of my elementary school. In 2013, stumbled upon the hard disk containing this project and decided that I would revamp it and re-learn C++. Most of the codebase ended up using old C++ mixed with C++11 (ie, mixing the old POSIX threads with C++11 threads.. no good I guess), plus the STD iterators and all convenience functions it offers. I was tempted to use Boost, but due to a lack of knowledge and my desire of portability and ease of installation, I tried to stick to the bare minimum of code APIs.
+This project is a very basic shoot'em up game. It was developed in the year 2000 as the final project of my elementary school. In 2013, stumbled upon the hard disk containing this project and decided that I would revamp it and re-learn C++. Most of the codebase ended up using old C++ mixed with C++11 (ie, mixing the old POSIX threads with C++11 threads.. no good I guess), plus the STD iterators and all convenience functions it offers. I was tempted to use Boost, but due to a lack of knowledge and my desire of portability and ease of installation, I tried to stick to the bare minimum of code APIs.
 
 There is still work to do, quite a lot only if my wish is to leave it stable and.. well, visually won't change that much, it's what I like the most! :)
 
