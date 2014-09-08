@@ -1,11 +1,10 @@
 #ifndef EXPLOSION_H
 #define EXPLOSION_H
 
-#include <OpenGL/OpenGL.h>
-
 #include <cstdio>
 #include <ctime>
 
+#include "gl_helper.h"
 #include "entity.h"
 #include "defs.h"
 #include "asset_helper.h"

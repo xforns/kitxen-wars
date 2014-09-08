@@ -1,6 +1,5 @@
 #include "episode_help.h"
 #include "defs.h"
-#include "gl_helper.h"
 #include <iostream>
 
 /****************************************************************

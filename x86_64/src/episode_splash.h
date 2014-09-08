@@ -1,12 +1,12 @@
 #ifndef EPISODE_SPLASH_H
 #define EPISODE_SPLASH_H
 
-#include <OpenGL/OpenGL.h>
 #include <map>
 #include <string>
 #include <cstdio>
 #include <ctime>
 
+#include "gl_helper.h"
 #include "episode.h"
 #include "asset_helper.h"
 
@@ -37,9 +37,19 @@ public:
 	virtual void update();
 	virtual void draw();
 	
+	// Starts the timer that governs the time showing each screen.
 	void init_timer();
+	
+	// Returns whether the timer has expired.
+	// Return:
+	//	bool If true, timer has expired.
 	bool timer_expired();
+	
+	// Loads an "episode": in the context of the splash, an episode means an image being displayed.
+	// Params:
+	//	episode Next image to load.
 	void load_episode(_splash_episodes episode);
+	
 };
 
 #endif /* EPISODE_SPLASH_H */

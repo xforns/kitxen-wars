@@ -1,12 +1,11 @@
 #ifndef EPISODES_H
 #define EPISODES_H
 
-#include <OpenGL/OpenGL.h>
-#include <GLUT/GLUT.h>
 #include <map>
 #include <string>
 #include <iostream>
 
+#include "gl_helper.h"
 #include "defs.h"
 #include "observer.h"
 #include "messaging.h"
@@ -35,8 +34,15 @@ private:
 	
 	episode *_current_episode;
 	
+	// Update routine.
 	void update();
+	
+	// Draw routine.
  	void draw();
+	
+	// Loads an episode.
+	// Params:
+	//	episode: Episode to load.
 	bool load(_episode_defs episode);
  
 public:
@@ -44,10 +50,18 @@ public:
 	episodes();
 	~episodes();
 	
+	// Convenience function for initialization purposes.
 	void start();
+	
+	// Convenience function taking the same name as its GLUT counterpart.
 	void glutDisplayFunc();
+	
+	// Convenience function taking the same name as its GLUT counterpart.
 	void glutReshapeFunc(int w, int h);
 	
+	// Returns whether the whole game has finished, that is, user wants to exit from the menu.
+	// Return:
+	//	bool True if game has to stop.
 	bool hasFinished();
 	
 	virtual void update(const observable_data &param);

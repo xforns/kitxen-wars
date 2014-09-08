@@ -1,12 +1,12 @@
 #ifndef EPISODE_END_H
 #define EPISODE_END_H
 
-#include <OpenGL/OpenGL.h>
 #include <map>
 #include <string>
 #include <cstdio>
 #include <ctime>
 
+#include "gl_helper.h"
 #include "episode.h"
 #include "observer.h"
 #include "messaging.h"

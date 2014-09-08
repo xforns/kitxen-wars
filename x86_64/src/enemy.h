@@ -1,7 +1,7 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <OpenGL/OpenGL.h>
+#include "gl_helper.h"
 #include <ctime>
 #include <cstdio>
 

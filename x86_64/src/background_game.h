@@ -1,9 +1,8 @@
 #ifndef BACKGROUND_GAME_H
 #define BACKGROUND_GAME_H
 
-#include <OpenGL/OpenGL.h>
+#include "gl_helper.h"
 #include <ctime>
-
 #include "asset_helper.h"
 #include "defs.h"
 #include "messaging.h"

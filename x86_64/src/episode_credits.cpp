@@ -1,6 +1,5 @@
 #include "episode_credits.h"
 #include "defs.h"
-#include "gl_helper.h"
 #include <iostream>
 
 /****************************************************************

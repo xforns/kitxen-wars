@@ -1,5 +1,4 @@
 #include "background_game.h"
-#include "gl_helper.h"
 
 GLuint background_game::_bg1, background_game::_bg2;
 double background_game::_bg_y1, background_game::_bg_y2;

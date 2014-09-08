@@ -1,13 +1,13 @@
 #ifndef EPISODE_GAME_H
 #define EPISODE_GAME_H
 
-#include <OpenGL/OpenGL.h>
 #include <vector>
 #include <map>
 #include <string>
 #include <iostream>
 #include <memory>
 
+#include "gl_helper.h"
 #include "episode.h"
 #include "asset_helper.h"
 #include "defs.h"
@@ -53,10 +53,18 @@ private:
 	
 	collision_system _collision_system;
 	
+	// Draws the main character.
 	void draw_main_character();
+	
+	// Draw all enemies.
 	void draw_enemies();
+	
+	// Draws all bullets.
 	void draw_bullets();
 	
+	// Adds enemies, as many as indicated.
+	// Params:
+	//	batch: Number of enemies to add.
 	void add_enemies(int batch);
 	
 public:

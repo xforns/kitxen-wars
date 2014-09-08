@@ -1,8 +1,6 @@
-#include <OpenGL/OpenGL.h>
-#include <GLUT/GLUT.h>
-
 #include "episodes.h"
 #include "defs.h"
+#include "gl_helper.h"
 
 
 episodes episodes;

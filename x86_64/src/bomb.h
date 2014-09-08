@@ -5,6 +5,7 @@
 #include <ctime>
 #include <cstdio>
 
+#include "gl_helper.h"
 #include "entity.h"
 #include "asset_helper.h"
 #include "defs.h"

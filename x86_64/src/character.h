@@ -1,8 +1,7 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include <OpenGL/OpenGL.h>
-
+#include "gl_helper.h"
 #include "entity.h"
 #include "asset_helper.h"
 #include "defs.h"
